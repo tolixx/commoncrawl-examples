@@ -231,8 +231,9 @@ public class ExampleMetadataDomainPageCount
       configFile = args[1];
 
     // For this example, only look at a single metadata file.
-    String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-*";
+    String inputPath  = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-*";
     String inputPath2 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089905/metadata-*";
+    String inputPath3 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089627/metadata-*";
     //String baseInputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment";
  
     // Switch to this if you'd like to look at all metadata files.  May take many minutes just to read the file listing.
