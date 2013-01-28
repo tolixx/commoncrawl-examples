@@ -224,7 +224,7 @@ public class ExampleMetadataDomainPageCount
     // Scan the provided input path for ARC files.
     LOG.info("setting input path to '"+ inputPath + "'");
     
-    //FileInputFormat.addInputPath(job, new Path(inputPath));
+    FileInputFormat.addInputPath(job, new Path(inputPath));
     FileSystem fs;
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
