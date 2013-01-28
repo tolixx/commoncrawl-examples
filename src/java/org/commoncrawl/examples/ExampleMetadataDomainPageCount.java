@@ -271,7 +271,8 @@ public class ExampleMetadataDomainPageCount
 
     // Set the output data types.
     job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(LongWritable.class);
+    //job.setOutputValueClass(LongWritable.class);
+    job.setOutputValueClass(Text.class);
 
     //--- how to ---
 
