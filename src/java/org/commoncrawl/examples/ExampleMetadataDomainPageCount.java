@@ -210,6 +210,8 @@ public class ExampleMetadataDomainPageCount
     if (fs.exists(new Path(outputPath)))
       fs.delete(new Path(outputPath), true);
 
+    // testing git ---- here ---
+
     // Set the path where final output 'part' files will be saved.
     LOG.info("setting output path to '" + outputPath + "'");
     FileOutputFormat.setOutputPath(job, new Path(outputPath));
@@ -225,7 +227,7 @@ public class ExampleMetadataDomainPageCount
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(LongWritable.class);
 
-    // Set which Mapper and Reducer classes to use.
+    // Set which Mapper and Reducer classes to use. jjjkl
     job.setMapperClass(ExampleMetadataDomainPageCount.ExampleMetadataDomainPageCountMapper.class);
     job.setReducerClass(LongSumReducer.class);
 
