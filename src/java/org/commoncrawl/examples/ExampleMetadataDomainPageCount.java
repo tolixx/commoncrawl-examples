@@ -228,6 +228,8 @@ public class ExampleMetadataDomainPageCount
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
 
+    LOG.info("Starting the fileStatus loop");
+
     for (FileStatus fileStatus : fs.globStatus(new Path("/common-crawl/parse-output/valid_segments/[0-9]*"))) { 
       String[] parts = fileStatus.getPath().toString().split("/");
       String inputPath = baseInputPath + "/" + parts[parts.length-1] + "/metadata-*";
