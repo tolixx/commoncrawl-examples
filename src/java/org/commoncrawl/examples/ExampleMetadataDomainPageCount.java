@@ -140,6 +140,7 @@ public class ExampleMetadataDomainPageCount
                                 domain = domainObj.topPrivateDomain().name();
                                 // output.collect(new Text(domain), new LongWritable(1));
                                 
+                                
                                 if ( domain.equalsIgnoreCase("markosweb.com") ) {
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
@@ -148,6 +149,23 @@ public class ExampleMetadataDomainPageCount
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
+                                if ( domain.equalsIgnoreCase("www.singer22.com") ) {
+                                    output.collect(new Text(linkhref), new Text(url));
+                                }
+
+                                if ( domain.equalsIgnoreCase("singer22.com") ) {
+                                    output.collect(new Text(linkhref), new Text(url));
+                                }
+
+                                if ( domain.equalsIgnoreCase("yourwebsite.com") ) {
+                                    output.collect(new Text(linkhref), new Text(url));
+                                }
+
+                                if ( domain.equalsIgnoreCase("www.yourwebsite.com") ) {
+                                    output.collect(new Text(linkhref), new Text(url));
+                                }
+
+                                //-- all the links here --  
 
                             }
                         }
@@ -214,6 +232,7 @@ public class ExampleMetadataDomainPageCount
 
     // For this example, only look at a single metadata file.
     String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-*";
+    String inputPath2 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089905/metadata-*";
     //String baseInputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment";
  
     // Switch to this if you'd like to look at all metadata files.  May take many minutes just to read the file listing.
@@ -234,6 +253,8 @@ public class ExampleMetadataDomainPageCount
     LOG.info("setting input path to '"+ inputPath + "'");
     
     FileInputFormat.addInputPath(job, new Path(inputPath));
+    FileInputFormat.addInputPath(job, new Path(inputPath2));
+    
     FileSystem fs;
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
