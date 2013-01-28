@@ -227,6 +227,8 @@ public class ExampleMetadataDomainPageCount
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(LongWritable.class);
 
+    //--- how to ---
+
     // Set which Mapper and Reducer classes to use. jjjkl
     job.setMapperClass(ExampleMetadataDomainPageCount.ExampleMetadataDomainPageCountMapper.class);
     job.setReducerClass(LongSumReducer.class);
