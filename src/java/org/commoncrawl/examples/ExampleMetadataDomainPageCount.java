@@ -22,6 +22,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.FileOutputFormat;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.mapred.InputSplit;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
@@ -197,7 +198,7 @@ public class ExampleMetadataDomainPageCount
     job.setJarByClass(ExampleMetadataDomainPageCount.class);
 
     // Scan the provided input path for ARC files.
-    LOG.info("setting input path to '"+ inputPath + "'");
+    // LOG.info("setting input path to '"+ inputPath + "'");
     
     //FileInputFormat.addInputPath(job, new Path(inputPath));
     FileSystem fs;
