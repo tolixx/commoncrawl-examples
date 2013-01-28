@@ -180,6 +180,7 @@ public class ExampleMetadataDomainPageCount
 
     // For this example, only look at a single metadata file.
     String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01849";
+    String baseInputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment";
  
     // Switch to this if you'd like to look at all metadata files.  May take many minutes just to read the file listing.
     // String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/*/metadata-*";
@@ -197,7 +198,20 @@ public class ExampleMetadataDomainPageCount
 
     // Scan the provided input path for ARC files.
     LOG.info("setting input path to '"+ inputPath + "'");
-    FileInputFormat.addInputPath(job, new Path(inputPath));
+    
+    //FileInputFormat.addInputPath(job, new Path(inputPath));
+    FileSystem fs;
+
+    fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
+
+    for (FileStatus fileStatus : fs.globStatus(new Path("/common-crawl/parse-output/valid_segments/[0-9]*"))) { 
+      String[] parts = fileStatus.getPath().toString().split("/");
+      String inputPath = baseInputPath + "/" + parts[parts.length-1] + "/metadata-*";
+      LOG.info("adding input path '" + inputPath + "'");
+      FileInputFormat.addInputPath(job, new Path(inputPath));
+    }
+
+
 
     // Optionally, you can add in a custom input path filter
     // FileInputFormat.setInputPathFilter(job, SampleFilter.class);
@@ -205,7 +219,7 @@ public class ExampleMetadataDomainPageCount
     // Delete the output path directory if it already exists.
     LOG.info("clearing the output path at '" + outputPath + "'");
 
-    FileSystem fs = FileSystem.get(new URI(outputPath), job);
+    fs = FileSystem.get(new URI(outputPath), job);
 
     if (fs.exists(new Path(outputPath)))
       fs.delete(new Path(outputPath), true);
