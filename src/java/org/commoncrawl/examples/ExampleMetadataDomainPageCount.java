@@ -230,13 +230,17 @@ public class ExampleMetadataDomainPageCount
 
     LOG.info("Starting the fileStatus loop");
 
+    Integer pathAdded = 0;
+
     for (FileStatus fileStatus : fs.globStatus(new Path("/common-crawl/parse-output/valid_segments/[0-9]*"))) { 
       String[] parts = fileStatus.getPath().toString().split("/");
       String inputPath = baseInputPath + "/" + parts[parts.length-1] + "/metadata-*";
       LOG.info("adding input path '" + inputPath + "'");
+      ++pathAdded;
       FileInputFormat.addInputPath(job, new Path(inputPath));
     }
 
+    LOG.info ( "Added segments : " + pathAdded.toString() );
 
 
     // Optionally, you can add in a custom input path filter
