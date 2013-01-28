@@ -43,6 +43,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
 
 // Google Guava classes
 import com.google.common.net.InternetDomainName;
@@ -74,59 +75,81 @@ public class ExampleMetadataDomainPageCount
     public void map(Text key, Text value, OutputCollector<Text, LongWritable> output, Reporter reporter)
         throws IOException {
 
-      // key & value are "Text" right now ...
-      String url   = key.toString();
-      String json  = value.toString();
+      String url = key.toString();
+            String json = value.toString();
 
-      try {
+            try {
 
-        // Get the base domain name
-        URI uri = new URI(url);
-        String host = uri.getHost();
+                // Get the base domain name
+                URI uri = new URI(url);
+                String host = uri.getHost();
 
-        if (host == null) {
-          reporter.incrCounter(this._counterGroup, "Invalid URI", 1);
-          return;
+                if (host == null) {
+                    reporter.incrCounter(this._counterGroup, "Invalid URI", 1);
+                    return;
+                }
+
+                InternetDomainName domainObj = InternetDomainName.from(host);
+
+                String domain = domainObj.topPrivateDomain().name();
+
+                if (domain == null) {
+                    reporter.incrCounter(this._counterGroup, "Invalid Domain", 1);
+                    return;
+                }
+
+                // See if the page has a successful HTTP code
+                JsonParser jsonParser = new JsonParser();
+                JsonObject jsonObj = jsonParser.parse(json).getAsJsonObject();
+
+
+
+                if (jsonObj.has("content") == false) {
+                    reporter.incrCounter(this._counterGroup, "Content Missing", 1);
+                    return;
+                }
+
+                JsonObject jsonContent = jsonObj.getAsJsonObject("content");
+
+                if (jsonContent.has("links") == false) {
+                    reporter.incrCounter(this._counterGroup, "Links Missing", 1);
+                    return;
+                }
+
+                JsonArray contentLinks = jsonContent.getAsJsonArray("links");
+
+                int linksCount = contentLinks.size();
+                JsonObject link;
+                for (int i = 0; i < linksCount; i++) {
+                    link = contentLinks.get(i).getAsJsonObject();
+                    if (link.has("type") == true) {
+                        String linktype = link.get("type").getAsString();
+                        if (linktype.equalsIgnoreCase("a")) {
+                            if (link.has("href") == true) {
+                                String linkhref = link.get("href").getAsString();
+
+                                uri = new URI(linkhref);
+                                host = uri.getHost();
+
+                                if (host == null) {
+                                    reporter.incrCounter(this._counterGroup, "Invalid URI", 1);
+                                    return;
+                                }
+
+                                domainObj = InternetDomainName.from(host);
+                                domain = domainObj.topPrivateDomain().name();
+                                output.collect(new Text(domain), new LongWritable(1));
+                            }
+                        }
+                    }
+                }
+            } catch (IOException ex) {
+                throw ex;
+            } catch (Exception ex) {
+                LOG.error("Caught Exception", ex);
+                reporter.incrCounter(this._counterGroup, "Exceptions", 1);
+            }
         }
-
-        InternetDomainName domainObj = InternetDomainName.from(host);
-
-        String domain = domainObj.topPrivateDomain().name();
-
-        if (domain == null) {
-          reporter.incrCounter(this._counterGroup, "Invalid Domain", 1);
-          return;
-        }
-
-        // See if the page has a successful HTTP code
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObj    = jsonParser.parse(json).getAsJsonObject();
-
-        int httpCode;
-
-        if (jsonObj.has("http_result") == false) {
-          reporter.incrCounter(this._counterGroup, "HTTP Code Missing", 1);
-          return;
-        }
-
-        if (jsonObj.get("http_result").getAsInt() == 200) {
-          reporter.incrCounter(this._counterGroup, "HTTP Success", 1);
-
-          // only output counts for pages that were successfully retrieved
-          output.collect(new Text(domain), new LongWritable(1));
-        }
-        else {
-          reporter.incrCounter(this._counterGroup, "HTTP Not Success", 1);
-        }
-      }
-      catch (IOException ex) {
-        throw ex;
-      }
-      catch (Exception ex) {
-        LOG.error("Caught Exception", ex); 
-        reporter.incrCounter(this._counterGroup, "Exceptions", 1);
-      }
-    }
   }
 
 
