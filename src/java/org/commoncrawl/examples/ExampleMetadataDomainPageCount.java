@@ -66,13 +66,13 @@ public class ExampleMetadataDomainPageCount
    */ 
   public static class ExampleMetadataDomainPageCountMapper
       extends    MapReduceBase
-      implements Mapper<Text, Text, Text, LongWritable> {
+      implements Mapper<Text, Text, Text, Text> {
 
     // create a counter group for Mapper-specific statistics
     private final String _counterGroup = "Custom Mapper Counters";
 
     // implement the main "map" function
-    public void map(Text key, Text value, OutputCollector<Text, LongWritable> output, Reporter reporter)
+    public void map(Text key, Text value, OutputCollector<Text, Text> output, Reporter reporter)
         throws IOException {
 
       String url = key.toString();
@@ -138,7 +138,8 @@ public class ExampleMetadataDomainPageCount
 
                                 domainObj = InternetDomainName.from(host);
                                 domain = domainObj.topPrivateDomain().name();
-                                output.collect(new Text(domain), new LongWritable(1));
+                                // output.collect(new Text(domain), new LongWritable(1));
+                                output.collect(new Text(url), new Text(linkhref));
                             }
                         }
                     }
@@ -203,8 +204,8 @@ public class ExampleMetadataDomainPageCount
       configFile = args[1];
 
     // For this example, only look at a single metadata file.
-    // String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01849";
-    String baseInputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment";
+    String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01849";
+    //String baseInputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment";
  
     // Switch to this if you'd like to look at all metadata files.  May take many minutes just to read the file listing.
     // String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/*/metadata-*";
@@ -221,7 +222,7 @@ public class ExampleMetadataDomainPageCount
     job.setJarByClass(ExampleMetadataDomainPageCount.class);
 
     // Scan the provided input path for ARC files.
-    // LOG.info("setting input path to '"+ inputPath + "'");
+    LOG.info("setting input path to '"+ inputPath + "'");
     
     //FileInputFormat.addInputPath(job, new Path(inputPath));
     FileSystem fs;
@@ -230,6 +231,7 @@ public class ExampleMetadataDomainPageCount
 
     LOG.info("Starting the fileStatus loop");
 
+    /*
     Integer pathAdded = 0;
 
     for (FileStatus fileStatus : fs.globStatus(new Path("/common-crawl/parse-output/valid_segments/[0-9]*"))) { 
@@ -241,7 +243,7 @@ public class ExampleMetadataDomainPageCount
     }
 
     LOG.info ( "Added segments : " + pathAdded.toString() );
-
+    */
 
     // Optionally, you can add in a custom input path filter
     // FileInputFormat.setInputPathFilter(job, SampleFilter.class);
@@ -275,7 +277,7 @@ public class ExampleMetadataDomainPageCount
 
     // Set which Mapper and Reducer classes to use. jjjkl
     job.setMapperClass(ExampleMetadataDomainPageCount.ExampleMetadataDomainPageCountMapper.class);
-    job.setReducerClass(LongSumReducer.class);
+    //job.setReducerClass(LongSumReducer.class);
 
     if (JobClient.runJob(job).isSuccessful())
       return 0;
