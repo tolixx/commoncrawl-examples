@@ -139,7 +139,16 @@ public class ExampleMetadataDomainPageCount
                                 domainObj = InternetDomainName.from(host);
                                 domain = domainObj.topPrivateDomain().name();
                                 // output.collect(new Text(domain), new LongWritable(1));
-                                output.collect(new Text(linkhref), new Text(url));
+                                
+                                if ( domain.equalsIgnoreCase("plus.google.com") ) {
+                                    output.collect(new Text(linkhref), new Text(url));
+                                }
+
+                                if ( domain.equalsIgnoreCase("google.com") ) {
+                                    output.collect(new Text(linkhref), new Text(url));
+                                }
+
+
                             }
                         }
                     }
