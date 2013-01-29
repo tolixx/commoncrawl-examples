@@ -80,6 +80,8 @@ public class ExampleMetadataDomainPageCount
 
             try {
 
+                reporter.incrCounter(this._counterGroup, "keys processed", 1);
+
                 // Get the base domain name
                 URI uri = new URI(url);
                 String host = uri.getHost();
@@ -126,13 +128,15 @@ public class ExampleMetadataDomainPageCount
                         String linktype = link.get("type").getAsString();
                         if (linktype.equalsIgnoreCase("a")) {
                             if (link.has("href") == true) {
+
+                                reporter.incrCounter(this._counterGroup, "ahref processed", 1);
                                 String linkhref = link.get("href").getAsString();
 
                                 uri = new URI(linkhref);
                                 host = uri.getHost();
 
                                 if (host == null) {
-                                    reporter.incrCounter(this._counterGroup, "Invalid URI", 1);
+                                    reporter.incrCounter(this._counterGroup, "Invalid linkto URI", 1);
                                     return;
                                 }
 
@@ -142,26 +146,32 @@ public class ExampleMetadataDomainPageCount
                                 
                                 
                                 if ( domain.equalsIgnoreCase("markosweb.com") ) {
+                                    reporter.incrCounter(this._counterGroup, "markosweb.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
                                 if ( domain.equalsIgnoreCase("www.markosweb.com") ) {
+                                    reporter.incrCounter(this._counterGroup, "www.markosweb.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
                                 if ( domain.equalsIgnoreCase("www.singer22.com") ) {
+                                    reporter.incrCounter(this._counterGroup, "www.singer22.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
                                 if ( domain.equalsIgnoreCase("singer22.com") ) {
+                                    reporter.incrCounter(this._counterGroup, "singer22.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
                                 if ( domain.equalsIgnoreCase("yourwebsite.com") ) {
+                                    reporter.incrCounter(this._counterGroup, "yourwebsite.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
                                 if ( domain.equalsIgnoreCase("www.yourwebsite.com") ) {
+                                    reporter.incrCounter(this._counterGroup, "www.yourwebsite.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
@@ -232,8 +242,8 @@ public class ExampleMetadataDomainPageCount
 
     // For this example, only look at a single metadata file.
     String inputPath  = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-*";
-    String inputPath2 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089905/metadata-*";
-    String inputPath3 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089627/metadata-*";
+    //String inputPath2 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089905/metadata-*";
+    //String inputPath3 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089627/metadata-*";
     //String baseInputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment";
  
     // Switch to this if you'd like to look at all metadata files.  May take many minutes just to read the file listing.
