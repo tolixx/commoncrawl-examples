@@ -148,6 +148,8 @@ public class ExampleMetadataDomainPageCount
                                     }
                                     //return;
                                 
+                                } catch (IOException ex) {
+                                    throw ex;
                                 } catch (Exception e) {
                                     reporter.incrCounter(this._counterGroup, "Exceptions linkhref", 1);
                                 } 
