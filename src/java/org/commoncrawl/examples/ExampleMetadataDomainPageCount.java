@@ -144,6 +144,7 @@ public class ExampleMetadataDomainPageCount
                                 domain = domainObj.topPrivateDomain().name();
                                 // output.collect(new Text(domain), new LongWritable(1));
                                 
+                                /*
                                 
                                 if ( domain.equalsIgnoreCase("markosweb.com") ) {
                                     reporter.incrCounter(this._counterGroup, "markosweb.com", 1);
@@ -174,6 +175,9 @@ public class ExampleMetadataDomainPageCount
                                     reporter.incrCounter(this._counterGroup, "www.yourwebsite.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
+                                */
+
+                                output.collect ( new Text(domain), new Text(url) );
 
                                 //-- all the links here --  
 
@@ -241,7 +245,10 @@ public class ExampleMetadataDomainPageCount
       configFile = args[1];
 
     // For this example, only look at a single metadata file.
-    String inputPath  = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-*";
+    //String inputPath  = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-*";
+    
+    String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01849";
+
     String inputPath2 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089905/metadata-*";
     String inputPath3 = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1346176089627/metadata-*";
     //String baseInputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment";
@@ -264,8 +271,8 @@ public class ExampleMetadataDomainPageCount
     LOG.info("setting input path to '"+ inputPath + "'");
     
     FileInputFormat.addInputPath(job, new Path(inputPath));
-    FileInputFormat.addInputPath(job, new Path(inputPath2));
-    FileInputFormat.addInputPath(job, new Path(inputPath3));
+    //FileInputFormat.addInputPath(job, new Path(inputPath2));
+    //FileInputFormat.addInputPath(job, new Path(inputPath3));
     
     FileSystem fs;
 
