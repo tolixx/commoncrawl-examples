@@ -147,9 +147,7 @@ public class ExampleMetadataDomainPageCount
                                         output.collect ( new Text(linkhref), new Text(url) );
                                     }
                                     //return;
-                                }
-
-
+                                
                                 } catch (Exception e) {
                                     reporter.incrCounter(this._counterGroup, "Exceptions linkhref", 1);
                                 } 
