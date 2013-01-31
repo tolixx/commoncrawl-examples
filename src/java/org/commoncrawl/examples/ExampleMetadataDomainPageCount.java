@@ -150,6 +150,7 @@ public class ExampleMetadataDomainPageCount
                                 // output.collect(new Text(domain), new LongWritable(1));
                                 
 
+                                /*  
                                 
                                 if ( domain.equalsIgnoreCase("markosweb.com") ) {
                                     reporter.incrCounter(this._counterGroup, "markosweb.com", 1);
@@ -166,10 +167,11 @@ public class ExampleMetadataDomainPageCount
                                     reporter.incrCounter(this._counterGroup, "yourwebsite.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
+                                */
 
                               
 
-                                // output.collect ( new Text(linkhref), new Text(url) );
+                                output.collect ( new Text(linkhref), new Text(url) );
 
                                 //-- all the links here --  
 
