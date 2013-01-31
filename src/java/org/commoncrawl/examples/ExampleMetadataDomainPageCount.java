@@ -144,23 +144,14 @@ public class ExampleMetadataDomainPageCount
                                 domain = domainObj.topPrivateDomain().name();
                                 // output.collect(new Text(domain), new LongWritable(1));
                                 
-                                /*
+
                                 
                                 if ( domain.equalsIgnoreCase("markosweb.com") ) {
                                     reporter.incrCounter(this._counterGroup, "markosweb.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
-                                if ( domain.equalsIgnoreCase("www.markosweb.com") ) {
-                                    reporter.incrCounter(this._counterGroup, "www.markosweb.com", 1);
-                                    output.collect(new Text(linkhref), new Text(url));
-                                }
-
-                                if ( domain.equalsIgnoreCase("www.singer22.com") ) {
-                                    reporter.incrCounter(this._counterGroup, "www.singer22.com", 1);
-                                    output.collect(new Text(linkhref), new Text(url));
-                                }
-
+                                
                                 if ( domain.equalsIgnoreCase("singer22.com") ) {
                                     reporter.incrCounter(this._counterGroup, "singer22.com", 1);
                                     output.collect(new Text(linkhref), new Text(url));
@@ -171,13 +162,9 @@ public class ExampleMetadataDomainPageCount
                                     output.collect(new Text(linkhref), new Text(url));
                                 }
 
-                                if ( domain.equalsIgnoreCase("www.yourwebsite.com") ) {
-                                    reporter.incrCounter(this._counterGroup, "www.yourwebsite.com", 1);
-                                    output.collect(new Text(linkhref), new Text(url));
-                                }
-                                */
+                              
 
-                                output.collect ( new Text(domain), new Text(url) );
+                                // output.collect ( new Text(linkhref), new Text(url) );
 
                                 //-- all the links here --  
 
