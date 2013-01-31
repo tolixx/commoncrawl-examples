@@ -133,20 +133,30 @@ public class ExampleMetadataDomainPageCount
                                 String linkhref = link.get("href").getAsString();
 
 
+
                                 try {
                                     uri = new URI(linkhref);
                                     host = uri.getHost();
+
+                                    if (host == null) {
+                                       reporter.incrCounter(this._counterGroup, "Invalid linkto URI", 1);
+                                    } else {
+                                        domainObj = InternetDomainName.from(host);
+                                        domain = domainObj.topPrivateDomain().name();
+
+                                        output.collect ( new Text(linkhref), new Text(url) );
+                                    }
+                                    //return;
+                                }
+
+
                                 } catch (Exception e) {
                                     reporter.incrCounter(this._counterGroup, "Exceptions linkhref", 1);
                                 } 
 
-                                if (host == null) {
-                                    reporter.incrCounter(this._counterGroup, "Invalid linkto URI", 1);
-                                    return;
-                                }
+                                
 
-                                domainObj = InternetDomainName.from(host);
-                                domain = domainObj.topPrivateDomain().name();
+                                
                                 // output.collect(new Text(domain), new LongWritable(1));
                                 
 
@@ -171,7 +181,7 @@ public class ExampleMetadataDomainPageCount
 
                               
 
-                                output.collect ( new Text(linkhref), new Text(url) );
+                               
 
                                 //-- all the links here --  
 
