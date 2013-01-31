@@ -132,8 +132,13 @@ public class ExampleMetadataDomainPageCount
                                 reporter.incrCounter(this._counterGroup, "ahref processed", 1);
                                 String linkhref = link.get("href").getAsString();
 
-                                uri = new URI(linkhref);
-                                host = uri.getHost();
+
+                                try {
+                                    uri = new URI(linkhref);
+                                    host = uri.getHost();
+                                } catch (Exception e) {
+                                    reporter.incrCounter(this._counterGroup, "Exceptions linkhref", 1);
+                                } 
 
                                 if (host == null) {
                                     reporter.incrCounter(this._counterGroup, "Invalid linkto URI", 1);
