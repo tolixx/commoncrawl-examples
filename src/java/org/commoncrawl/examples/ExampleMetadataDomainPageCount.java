@@ -255,6 +255,7 @@ public class ExampleMetadataDomainPageCount
 
     // For this example, only look at a single metadata file.
     String inputPath  = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/*/metadata-*";
+    String baseInputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment";
     
     //String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01849";
 
@@ -286,7 +287,7 @@ public class ExampleMetadataDomainPageCount
     int counter = 0;
 
     for (FileStatus fileStatus : fs.globStatus(new Path("/common-crawl/parse-output/valid_segments/[0-9]*"))) { 
-      String[] parts = fileStatus.getPath().toString().split("/");
+      String[] parts = fileStatus.getPath().toString(). vncsplit("/");
       String inputPath = baseInputPath + "/" + parts[parts.length-1] + "/metadata-*";
       LOG.info("adding input path '" + inputPath + "'");
       FileInputFormat.addInputPath(job, new Path(inputPath));
