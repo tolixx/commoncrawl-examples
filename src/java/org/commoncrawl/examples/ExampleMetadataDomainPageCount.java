@@ -278,12 +278,29 @@ public class ExampleMetadataDomainPageCount
 
     // Scan the provided input path for ARC files.
     LOG.info("setting input path to '"+ inputPath + "'");
-    
-    FileInputFormat.addInputPath(job, new Path(inputPath));
+  
+
+    FileSystem fs;
+
+    fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
+    int counter = 0;
+
+    for (FileStatus fileStatus : fs.globStatus(new Path("/common-crawl/parse-output/valid_segments/[0-9]*"))) { 
+      String[] parts = fileStatus.getPath().toString().split("/");
+      String inputPath = baseInputPath + "/" + parts[parts.length-1] + "/metadata-*";
+      LOG.info("adding input path '" + inputPath + "'");
+      FileInputFormat.addInputPath(job, new Path(inputPath));
+      ++counter;
+      if ( counter > 2 ) {
+         break; //--- 
+      }
+    }
+
+    //FileInputFormat.addInputPath(job, new Path(inputPath));
     //FileInputFormat.addInputPath(job, new Path(inputPath2));
     //FileInputFormat.addInputPath(job, new Path(inputPath3));
     
-    FileSystem fs;
+    
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
 
@@ -354,4 +371,8 @@ public class ExampleMetadataDomainPageCount
     System.exit(res);
   }
 }
+
+
+
+
 
