@@ -294,9 +294,6 @@ public class ExampleMetadataDomainPageCount
       LOG.info("adding input path '" + inputPath + "'");
       FileInputFormat.addInputPath(job, new Path(inputPath));
       ++counter;
-      if ( counter > 2 ) {
-         break; //--- 
-      }
     }
 
     //FileInputFormat.addInputPath(job, new Path(inputPath));
