@@ -288,7 +288,9 @@ public class ExampleMetadataDomainPageCount
 
     for (FileStatus fileStatus : fs.globStatus(new Path("/common-crawl/parse-output/valid_segments/[0-9]*"))) { 
       String[] parts = fileStatus.getPath().toString().split("/");
+      
       inputPath = baseInputPath + "/" + parts[parts.length-1] + "/metadata-*";
+      
       LOG.info("adding input path '" + inputPath + "'");
       FileInputFormat.addInputPath(job, new Path(inputPath));
       ++counter;
