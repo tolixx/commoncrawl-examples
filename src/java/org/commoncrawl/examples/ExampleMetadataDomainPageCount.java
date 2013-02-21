@@ -286,25 +286,30 @@ public class ExampleMetadataDomainPageCount
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
     int counter = 0;
 
-    for (FileStatus fileStatus : fs.globStatus(new Path("/common-crawl/parse-output/valid_segments/[0-9]*"))) { 
-      String[] parts = fileStatus.getPath().toString().split("/");
 
-      inputPath = baseInputPath + "/" + parts[parts.length-1] + "/metadata-*";
-      
-      LOG.info("adding input path '" + inputPath + "'");
-      FileInputFormat.addInputPath(job, new Path(inputPath));
-      ++counter;
+
+    String segmentListFile = "s3n://aws-publicdatasets/common-crawl/parse-output/valid_segments.txt";
+
+    fs = FileSystem.get(new URI(segmentListFile), job);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
+
+    String segmentId;
+    String lastSegment;
+
+    while ((segmentId = reader.readLine()) != null) {
+       inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
+       //LOG.info("We just use segment '" + inputPath + "'");
+       lastSegment = inputPath; ///--- the last one --- 
+       //FileInputFormat.addInputPath(job, new Path(inputPath));
+       ++counter;
     }
 
-    //FileInputFormat.addInputPath(job, new Path(inputPath));
-    //FileInputFormat.addInputPath(job, new Path(inputPath2));
-    //FileInputFormat.addInputPath(job, new Path(inputPath3));
-    
-    
+    FileInputFormat.addInputPath(job, new Path(lastSegment));
+    LOG.info("We just use segment '" + lastSegment + "'");
+  
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
-
-    LOG.info("Starting the fileStatus loop");
+    
 
     /*
     Integer pathAdded = 0;
