@@ -295,7 +295,7 @@ public class ExampleMetadataDomainPageCount
     BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
 
     String segmentId;
-    String lastSegment;
+    String lastSegment = "";
 
     while ((segmentId = reader.readLine()) != null) {
        inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
