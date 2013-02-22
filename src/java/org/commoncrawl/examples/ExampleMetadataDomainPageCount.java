@@ -94,7 +94,8 @@ public class ExampleMetadataDomainPageCount
 
                 InternetDomainName domainObj = InternetDomainName.from(host);
 
-                String domain = domainObj.topPrivateDomain().name();
+                String baseDomain = domainObj.topPrivateDomain().name();
+                String domain;
 
                 if (domain == null) {
                     reporter.incrCounter(this._counterGroup, "Invalid Domain", 1);
@@ -146,25 +147,27 @@ public class ExampleMetadataDomainPageCount
                                         domain = domainObj.topPrivateDomain().name();
 
 
+                                        //--- we just store an external links only ---
+
+                                        if ( !domain.equalsIgnoreCase(baseDomain) )  {
+
  
-                                
-                                        if ( domain.equalsIgnoreCase("markosweb.com") ) {
-                                          reporter.incrCounter(this._counterGroup, "markosweb.com", 1);
-                                          output.collect(new Text(linkhref), new Text(url));
-                                        }
+                                          if ( domain.equalsIgnoreCase("markosweb.com") ) {
+                                            reporter.incrCounter(this._counterGroup, "markosweb.com", 1);
+                                            output.collect(new Text(linkhref), new Text(url));
+                                          }
 
                                 
-                                        if ( domain.equalsIgnoreCase("singer22.com") ) {
-                                          reporter.incrCounter(this._counterGroup, "singer22.com", 1);
-                                          output.collect(new Text(linkhref), new Text(url));
+                                          if ( domain.equalsIgnoreCase("singer22.com") ) {
+                                            reporter.incrCounter(this._counterGroup, "singer22.com", 1);
+                                            output.collect(new Text(linkhref), new Text(url));
+                                          }
+
+                                          if ( domain.equalsIgnoreCase("yourwebsite.com") ) {
+                                            reporter.incrCounter(this._counterGroup, "yourwebsite.com", 1);
+                                            output.collect(new Text(linkhref), new Text(url));
+                                          }
                                         }
-
-                                        if ( domain.equalsIgnoreCase("yourwebsite.com") ) {
-                                          reporter.incrCounter(this._counterGroup, "yourwebsite.com", 1);
-                                          output.collect(new Text(linkhref), new Text(url));
-                                        }
-
-
                                 
 
                                         //output.collect ( new Text(linkhref), new Text(url) );
@@ -305,15 +308,14 @@ public class ExampleMetadataDomainPageCount
        //FileInputFormat.addInputPath(job, new Path(inputPath));
        ++counter;
 
-       if ( counter < 11 ) {
-            FileInputFormat.addInputPath(job, new Path(inputPath));
-            LOG.info("We just use segment '" + inputPath + "'");
-       }
+       
+       FileInputFormat.addInputPath(job, new Path(inputPath));
+       LOG.info("We just use segment '" + inputPath + "'");
+       
     }
 
     
     
-  
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
     
