@@ -95,9 +95,9 @@ public class ExampleMetadataDomainPageCount
                 InternetDomainName domainObj = InternetDomainName.from(host);
 
                 String baseDomain = domainObj.topPrivateDomain().name();
-                String domain;
+                String domain = null;
 
-                if (domain == null) {
+                if (baseDomain == null) {
                     reporter.incrCounter(this._counterGroup, "Invalid Domain", 1);
                     return;
                 }
