@@ -281,7 +281,7 @@ public class ExampleMetadataDomainPageCount
     this.getConf().setLong("mapreduce.task.timeout", 1000*3600*24 );
 
     // Creates a new job configuration for this Hadoop job
-    .
+    
     JobConf job = new JobConf(this.getConf());
 
 
