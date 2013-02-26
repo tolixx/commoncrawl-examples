@@ -276,8 +276,15 @@ public class ExampleMetadataDomainPageCount
       this.getConf().addResource(configFile);
     }
 
-    // Creates a new job configuration for this Hadoop job.
+
+    this.getConf().setLong("mapred.task.timeout", 1000*3600*24 );
+    this.getConf().setLong("mapreduce.task.timeout", 1000*3600*24 );
+
+    // Creates a new job configuration for this Hadoop job
+    .
     JobConf job = new JobConf(this.getConf());
+
+
 
     job.setJarByClass(ExampleMetadataDomainPageCount.class);
 
@@ -356,7 +363,7 @@ public class ExampleMetadataDomainPageCount
     // Set which InputFormat class to use.
     job.setInputFormat(SequenceFileInputFormat.class);
 
-    // Set which OutputFormat class to use.
+    // Set which OutputFormat class toString use.
     job.setOutputFormat(TextOutputFormat.class);
 
     // Set the output data types.
