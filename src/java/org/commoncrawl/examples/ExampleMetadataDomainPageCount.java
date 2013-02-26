@@ -276,14 +276,11 @@ public class ExampleMetadataDomainPageCount
       this.getConf().addResource(configFile);
     }
 
-
-    this.getConf().setLong("mapred.task.timeout", 1000*3600*24 );
-    this.getConf().setLong("mapreduce.task.timeout", 1000*3600*24 );
-
-    // Creates a new job configuration for this Hadoop job
     
-    JobConf job = new JobConf(this.getConf());
+    setConfiguration();
+    // Creates a new job configuration for this Hadoop job
 
+    JobConf job = new JobConf(this.getConf());
 
 
     job.setJarByClass(ExampleMetadataDomainPageCount.class);
@@ -391,6 +388,15 @@ public class ExampleMetadataDomainPageCount
       throws Exception {
     int res = ToolRunner.run(new Configuration(), new ExampleMetadataDomainPageCount(), args);
     System.exit(res);
+  }
+
+  protected void setConfiguration() {
+     this.getConf().setLong("mapred.task.timeout", 1000*3600*24 );
+     this.getConf().setLong("mapreduce.task.timeout", 1000*3600*24 );
+
+     this.getConf().setLong("mapred.max.tracker.failures", 20);
+     this.getConf().setLong("mapred.map.max.attempts",20 );
+     this.getConf().setLong("mapred.reduce.max.attempts",20 );
   }
 }
 
