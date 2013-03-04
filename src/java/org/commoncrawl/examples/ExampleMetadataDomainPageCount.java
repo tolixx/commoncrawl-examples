@@ -306,7 +306,7 @@ public class ExampleMetadataDomainPageCount
     String lastSegment = "";
 
 
-    String segmentInfo = this.getConf().getAsString("segment.info");
+    String segmentInfo = this.getConf().get("segment.info");
     LOG.info ( "SegmentInfo readed : " + segmentInfo ); //--- si ---
 
     String parts[] = segmentInfo.split("/"); //--- 1/2
