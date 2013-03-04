@@ -313,6 +313,7 @@ public class ExampleMetadataDomainPageCount
     
     int segmentNum = 0;
     int segmentAll = 0;
+    
 
     if ( parts.length == 2 ) {
         segmentNum = Integer.valueOf(parts[0]);
