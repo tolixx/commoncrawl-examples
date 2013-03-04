@@ -293,6 +293,7 @@ public class ExampleMetadataDomainPageCount
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
     int counter = 0;
+    int used = 0;
 
 
 
@@ -305,6 +306,22 @@ public class ExampleMetadataDomainPageCount
     String lastSegment = "";
 
 
+    String segmentInfo = this.getConf().getAsString("segment.info");
+    Log.info ( "SegmentInfo readed : " + segmentInfo ); //--- si ---
+
+    String parts[] = segmentInfo.split("/"); //--- 1/2
+    
+    int segmentNum = 0;
+    int segmentAll = 0;
+
+    if ( parts.length == 2 ) {
+        segmentNum = Integer.valueOf(parts[0]);
+        segmentAll = Integer.valueOf(parts[1]);
+    } 
+
+
+
+
     while ((segmentId = reader.readLine()) != null) {
        inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
        //LOG.info("We just use segment '" + inputPath + "'");
@@ -312,11 +329,16 @@ public class ExampleMetadataDomainPageCount
        //FileInputFormat.addInputPath(job, new Path(inputPath));
        ++counter;
 
-       
-       FileInputFormat.addInputPath(job, new Path(inputPath));
-       LOG.info("We just use segment '" + inputPath + "'");
+
+       if ( counter % segmentAll == (segmentNum - 1 ) ) {
+          ++used;
+          FileInputFormat.addInputPath(job, new Path(inputPath));
+          LOG.info("We just use segment '" + inputPath + "'" + Integer.toString(counter));
+       }
        
     }
+
+    Log.info ( "We used : " + Integer.toString(used) + " segments " );
 
     
     
@@ -393,11 +415,11 @@ public class ExampleMetadataDomainPageCount
   protected void setConfiguration() {
      this.getConf().setLong("mapred.task.timeout", 1000*3600*24 );
      this.getConf().setLong("mapreduce.task.timeout", 1000*3600*24 );
-
      this.getConf().setLong("mapred.max.tracker.failures", 20);
      this.getConf().setLong("mapred.map.max.attempts",20 );
      this.getConf().setLong("mapred.reduce.max.attempts",20 );
   }
+
 }
 
 
