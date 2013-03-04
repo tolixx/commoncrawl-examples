@@ -307,7 +307,7 @@ public class ExampleMetadataDomainPageCount
 
 
     String segmentInfo = this.getConf().getAsString("segment.info");
-    Log.info ( "SegmentInfo readed : " + segmentInfo ); //--- si ---
+    LOG.info ( "SegmentInfo readed : " + segmentInfo ); //--- si ---
 
     String parts[] = segmentInfo.split("/"); //--- 1/2
     
@@ -338,11 +338,7 @@ public class ExampleMetadataDomainPageCount
        
     }
 
-    Log.info ( "We used : " + Integer.toString(used) + " segments " );
-
-    
-    
-
+    LOG.info ( "We used : " + Integer.toString(used) + " segments " );
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
     
 
