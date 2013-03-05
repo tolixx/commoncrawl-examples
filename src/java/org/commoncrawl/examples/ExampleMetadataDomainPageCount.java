@@ -297,10 +297,7 @@ public class ExampleMetadataDomainPageCount
 
 
 
-    String segmentListFile = "s3n://aws-publicdatasets/common-crawl/parse-output/valid_segments.txt";
-
-    fs = FileSystem.get(new URI(segmentListFile), job);
-    BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
+    
 
     String segmentId;
     String lastSegment = "";
@@ -313,14 +310,17 @@ public class ExampleMetadataDomainPageCount
     
     int segmentNum = 0;
     int segmentAll = 0;
-    
+
 
     if ( parts.length == 2 ) {
         segmentNum = Integer.valueOf(parts[0]);
         segmentAll = Integer.valueOf(parts[1]);
     } 
 
+    String segmentListFile = "s3n://aws-publicdatasets/common-crawl/parse-output/valid_segments.txt";
 
+    fs = FileSystem.get(new URI(segmentListFile), job);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
 
 
     while ((segmentId = reader.readLine()) != null) {
@@ -334,7 +334,7 @@ public class ExampleMetadataDomainPageCount
        if ( counter % segmentAll == (segmentNum - 1 ) ) {
           ++used;
           FileInputFormat.addInputPath(job, new Path(inputPath));
-          LOG.info("We just use segment '" + inputPath + "'" + Integer.toString(counter));
+          LOG.info("We just use segment '" + inputPath + "', counter  : " + Integer.toString(counter));
        }
        
     }
