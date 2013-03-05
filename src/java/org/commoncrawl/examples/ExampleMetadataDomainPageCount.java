@@ -277,7 +277,7 @@ public class ExampleMetadataDomainPageCount
     }
 
     
-    setConfiguration();
+    //setConfiguration();
     // Creates a new job configuration for this Hadoop job
 
     JobConf job = new JobConf(this.getConf());
