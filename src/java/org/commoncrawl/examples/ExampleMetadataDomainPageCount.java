@@ -324,7 +324,7 @@ public class ExampleMetadataDomainPageCount
 
 
     while ((segmentId = reader.readLine()) != null) {
-       inputPath = "s3n://aws-publicdatasets/common-crawl/crawl-002/parse-output/segment/"+segmentId+"/metadata-*";
+       inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
        //LOG.info("We just use segment '" + inputPath + "'");
        lastSegment = inputPath; ///--- the last one --- 
        //FileInputFormat.addInputPath(job, new Path(inputPath));
@@ -339,7 +339,7 @@ public class ExampleMetadataDomainPageCount
        
     }
 
-    LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
+    LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter))  ;
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
     
 
