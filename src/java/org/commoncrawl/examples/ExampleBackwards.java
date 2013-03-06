@@ -308,6 +308,7 @@ public class ExampleBackwards extends Configured implements Tool {
     } 
 
     String segmentListFile = "s3n://aws-publicdatasets/common-crawl/parse-output/valid_segments.txt";
+    String inputPath = null;
 
     fs = FileSystem.get(new URI(segmentListFile), job);
     BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
@@ -329,7 +330,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
 
     //String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01666";
-    FileInputFormat.addInputPath(job, new Path(inputPath));
+    //FileInputFormat.addInputPath(job, new Path(inputPath));
 
     LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
 
