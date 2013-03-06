@@ -317,7 +317,7 @@ public class ExampleBackwards extends Configured implements Tool {
     }
     */
 
-    String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/textData-01666";
+    String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01666";
     FileInputFormat.addInputPath(job, new Path(inputPath));
 
     LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
