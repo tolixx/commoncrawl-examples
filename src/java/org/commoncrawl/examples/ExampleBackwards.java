@@ -84,6 +84,10 @@ public class ExampleBackwards extends Configured implements Tool {
             		return; //--- skip this record here ---
             	}
 
+
+            	output.collect ( new Text(url), new LongWritable(1)); 
+            	/*
+
             	JsonArray contentLinks = getAllLinks ( json );
             	if ( contentLinks == null ) {
             		return; 
@@ -111,7 +115,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
                     	if ( domain != null ) {
                     		output.collect ( new Text(href), new LongWritable(1)); //--- output the ---
-                    		/*
+                    		
                     		if ( !domain.equalsIgnoreCase(baseDomain) ) {
                     			//--- add external link, must be unique ---
                     			++totalLinks;
@@ -119,10 +123,11 @@ public class ExampleBackwards extends Configured implements Tool {
                     			//reporter.incrCounter(this._counterGroup, "external.links", 1);
                     			//map.put ( href, new Integer(1) );
                     		}
-                    		*/
+                    		
                     	}
                     }
                 }
+                */
 
 
 				//--- use iterate to add values ---   
@@ -153,7 +158,7 @@ public class ExampleBackwards extends Configured implements Tool {
                 return null;
             }
 
-            if ( !scheme.equalsIgnoreCase("http") ) {
+            if ( !scheme.equalsIgnoreCase("http") && !scheme.equalsIgnoreCase("https") ) {
             	reporter.incrCounter(this._counterGroup, "scheme."+scheme, 1);
             	return null;
             }
