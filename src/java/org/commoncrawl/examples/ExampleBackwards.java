@@ -57,7 +57,7 @@ public class ExampleBackwards extends Configured implements Tool {
 	
 	private static final Logger LOG = Logger.getLogger(ExampleBackwards.class);
 
-	public static class ExampleTextWordCountMapper
+	public static class ExampleBackwardsMapper
       extends    MapReduceBase 
       implements Mapper<Text, Text, Text, LongWritable> {
 
@@ -227,6 +227,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
     String outputPath = null;
     String configFile = null;
+    // String inputPath  = null;
 
     // Read the command line arguments.
     if (args.length <  1)
@@ -281,6 +282,7 @@ public class ExampleBackwards extends Configured implements Tool {
     BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
 
 
+    /*
     while ((segmentId = reader.readLine()) != null) {
        inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
        lastSegment = inputPath; ///--- the last one --- 
@@ -294,6 +296,10 @@ public class ExampleBackwards extends Configured implements Tool {
        }
        
     }
+    */
+
+    String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/textData-01666";
+    FileInputFormat.addInputPath(job, new Path(inputPath));
 
     LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
 
