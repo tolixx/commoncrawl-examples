@@ -76,6 +76,9 @@ public class ExampleBackwards extends Configured implements Tool {
 
             try {
 
+
+            	reporter.incrCounter(this._counterGroup, "inputStream", 1);
+
             	this.reporter = reporter; 
             	String baseDomain = getDomainName (url);
             	
@@ -88,7 +91,10 @@ public class ExampleBackwards extends Configured implements Tool {
             		return; 
             	}
 
+            	reporter.incrCounter(this._counterGroup, "validAllLinks", 1);
+
             	int linksCount = contentLinks.size();
+            	reporter.incrCounter(this._counterGroup, "totalLinkCount", linksCount);
             	
             	JsonObject link;
             	String  href;
@@ -100,8 +106,11 @@ public class ExampleBackwards extends Configured implements Tool {
                 for (int i = 0; i < linksCount; i++) {
                     link = contentLinks.get(i).getAsJsonObject();
                     href = getHref ( link );
+                    reporter.incrCounter(this._counterGroup, "tryToGetHrefs", linksCount);
                     if ( href != null ) {
+                    	reporter.incrCounter(this._counterGroup, "validHrefs", linksCount);
                     	domain = getDomainName ( href );
+
                     	if ( domain != null ) {
                     		output.collect ( new Text(href), new LongWritable(1)); //--- output the ---
                     		/*
@@ -159,12 +168,15 @@ public class ExampleBackwards extends Configured implements Tool {
     		JsonParser jsonParser = new JsonParser();
     		JsonObject jsonObj = jsonParser.parse(json).getAsJsonObject();
 
+    		reporter.incrCounter(this._counterGroup, "getAsJsonObject", 1);
+
     		if (jsonObj.has("content") == false) {
     			reporter.incrCounter(this._counterGroup, "Content Missing", 1);
     			return null ;
     		}
 
     		JsonObject jsonContent = jsonObj.getAsJsonObject("content");
+    		reporter.incrCounter(this._counterGroup, "Content.Parsed", 1);
 
     		if (jsonContent.has("links") == false) {
     			reporter.incrCounter(this._counterGroup, "Links Missing", 1);
