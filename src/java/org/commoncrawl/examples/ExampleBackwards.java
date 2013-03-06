@@ -313,7 +313,6 @@ public class ExampleBackwards extends Configured implements Tool {
     BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
 
 
-    /*
     while ((segmentId = reader.readLine()) != null) {
        inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
        lastSegment = inputPath; ///--- the last one --- 
@@ -327,9 +326,9 @@ public class ExampleBackwards extends Configured implements Tool {
        }
        
     }
-    */
 
-    String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01666";
+
+    //String inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1341690166822/metadata-01666";
     FileInputFormat.addInputPath(job, new Path(inputPath));
 
     LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
@@ -362,7 +361,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
     // Set which Mapper and Reducer classes to use. 
     job.setMapperClass(ExampleBackwards.ExampleBackwardsMapper.class);
-    job.setReducerClass(LongSumReducer.class);
+    //job.setReducerClass(LongSumReducer.class); -- 
 
     if (JobClient.runJob(job).isSuccessful())
       return 0;
