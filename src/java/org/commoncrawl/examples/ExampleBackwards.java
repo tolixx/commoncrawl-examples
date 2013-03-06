@@ -83,8 +83,8 @@ public class ExampleBackwards extends Configured implements Tool {
             		return; //--- skip this record here ---
             	}
 
-            	JsonArray links = getAllLinks ( json );
-            	if ( links == null ) {
+            	JsonArray contentLinks = getAllLinks ( json );
+            	if ( contentLinks == null ) {
             		return; 
             	}
 
