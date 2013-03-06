@@ -145,10 +145,17 @@ public class ExampleBackwards extends Configured implements Tool {
     protected String getDomainName ( String url ) {
         try {
             URI uri = new URI(url);
+
             String host = uri.getHost();
+            String scheme = uri.getScheme();
 
             if (host == null) {
                 return null;
+            }
+
+            if ( !scheme.equalsIgnoreCase("http") ) {
+            	reporter.incrCounter(this._counterGroup, "scheme."+scheme, 1);
+            	return null;
             }
 
             InternetDomainName domainObj = InternetDomainName.from(host);
