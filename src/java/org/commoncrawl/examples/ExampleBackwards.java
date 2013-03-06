@@ -72,8 +72,6 @@ public class ExampleBackwards extends Configured implements Tool {
         	String url = key.toString();
             String json = value.toString();
 
-
-
             try {
 
 
@@ -165,6 +163,9 @@ public class ExampleBackwards extends Configured implements Tool {
 
     protected JsonArray getAllLinks ( String json ) {
     	try {
+
+    		reporter.incrCounter(this._counterGroup, "startToParser", 1);
+
     		JsonParser jsonParser = new JsonParser();
     		JsonObject jsonObj = jsonParser.parse(json).getAsJsonObject();
 
@@ -342,8 +343,8 @@ public class ExampleBackwards extends Configured implements Tool {
 
     // Set the output data types.
     job.setOutputKeyClass(Text.class);
-    //job.setOutputValueClass(LongWritable.class);
-    job.setOutputValueClass(Text.class);
+    job.setOutputValueClass(LongWritable.class);
+    //job.setOutputValueClass(Text.class);
 
     //--- how to ---
 
