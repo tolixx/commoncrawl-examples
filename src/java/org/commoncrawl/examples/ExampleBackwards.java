@@ -37,6 +37,16 @@ import org.apache.hadoop.util.Progressable;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
+
+import com.google.common.net.InternetDomainName;
+
+
 /**
  * An example showing how to use the Common Crawl 'textData' files to efficiently
  * work with Common Crawl corpus text content.
