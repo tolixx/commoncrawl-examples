@@ -63,6 +63,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
     // create a counter group for Mapper-specific statistics
     private final String _counterGroup = "Custom Mapper Counters";
+    private Reporter reporter = null;
 
     public void map(Text key, Text value, OutputCollector<Text, LongWritable> output, Reporter reporter)
         throws IOException {
@@ -70,7 +71,11 @@ public class ExampleBackwards extends Configured implements Tool {
         	String url = key.toString();
             String json = value.toString();
 
+
+
             try {
+            	
+            	this.reporter = reporter; 
             	String baseDomain = getDomainName (url);
             	
             	if ( baseDomain == null ) {
