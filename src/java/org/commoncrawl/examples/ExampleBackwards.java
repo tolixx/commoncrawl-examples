@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.URI;
 
@@ -74,7 +75,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
 
             try {
-            	
+
             	this.reporter = reporter; 
             	String baseDomain = getDomainName (url);
             	
@@ -335,7 +336,7 @@ public class ExampleBackwards extends Configured implements Tool {
     //--- how to ---
 
     // Set which Mapper and Reducer classes to use. 
-    job.setMapperClass(ExampleBackwards.ExampleBackwardsCountMapper.class);
+    job.setMapperClass(ExampleBackwards.ExampleBackwardsMapper.class);
     job.setReducerClass(LongSumReducer.class);
 
     if (JobClient.runJob(job).isSuccessful())
