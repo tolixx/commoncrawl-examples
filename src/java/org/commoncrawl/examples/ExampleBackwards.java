@@ -314,7 +314,7 @@ public class ExampleBackwards extends Configured implements Tool {
     BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
 
 
-/*
+
     while ((segmentId = reader.readLine()) != null) {
        inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
        lastSegment = inputPath; ///--- the last one --- 
@@ -323,12 +323,13 @@ public class ExampleBackwards extends Configured implements Tool {
 
        if ( counter % segmentAll == (segmentNum - 1 ) ) {
           ++used;
-          FileInputFormat.addInputPath(job, new Path(inputPath));
-          LOG.info("We just use segment '" + inputPath + "', counter  : " + Integer.toString(counter));
+          //FileInputFormat.addInputPath(job, new Path(inputPath));
+          //LOG.info("We just use segment '" + inputPath + "', counter  : " + Integer.toString(counter));
+          LOG.info("SegmentId : " + segmentId);
        }
        
     }
-*/
+
 
     inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1350433107018/metadata-00095";
     FileInputFormat.addInputPath(job, new Path(inputPath));
