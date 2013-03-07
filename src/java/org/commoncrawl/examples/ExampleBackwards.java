@@ -339,7 +339,7 @@ public class ExampleBackwards extends Configured implements Tool {
     inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/" + segmentInfo + "/metadata-*";
     FileInputFormat.addInputPath(job, new Path(inputPath));
 
-    LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
+    //LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
     LOG.info("clearing the output path at '" + outputPath + "'");
