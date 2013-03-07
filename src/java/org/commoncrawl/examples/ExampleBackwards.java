@@ -296,6 +296,7 @@ public class ExampleBackwards extends Configured implements Tool {
     String segmentInfo = this.getConf().get("segment.info");
     LOG.info ( "SegmentInfo readed : " + segmentInfo ); //--- si ---
 
+/*
     String parts[] = segmentInfo.split("/"); //--- 1/2
     
     int segmentNum = 0;
@@ -305,7 +306,10 @@ public class ExampleBackwards extends Configured implements Tool {
     if ( parts.length == 2 ) {
         segmentNum = Integer.valueOf(parts[0]);
         segmentAll = Integer.valueOf(parts[1]);
-    } 
+    }
+*/
+
+
 
     String segmentListFile = "s3n://aws-publicdatasets/common-crawl/parse-output/valid_segments.txt";
     String inputPath = null;
@@ -315,6 +319,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
 
 
+/*
     while ((segmentId = reader.readLine()) != null) {
        inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
        lastSegment = inputPath; ///--- the last one --- 
@@ -329,9 +334,9 @@ public class ExampleBackwards extends Configured implements Tool {
        }
        
     }
+*/
 
-
-    inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/1350433107018/metadata-00095";
+    inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/" + segmentInfo + "/metadata-*";
     FileInputFormat.addInputPath(job, new Path(inputPath));
 
     LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
