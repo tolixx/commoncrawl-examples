@@ -309,7 +309,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
     // Set which Mapper and Reducer classes to use. 
     job.setMapperClass(ExampleBackwards.ExampleBackwardsMapper.class);
-    //job.setReducerClass(LongSumReducer.class); -- 
+    job.setReducerClass(LongSumReducer.class);
 
     if (JobClient.runJob(job).isSuccessful())
       return 0;
