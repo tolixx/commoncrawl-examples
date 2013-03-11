@@ -273,7 +273,7 @@ public class ExampleBackwards extends Configured implements Tool {
     String segmentInfo = this.getConf().get("segment.info");
     LOG.info ( "SegmentInfo readed : " + segmentInfo ); //--- si ---
 
-    String segmentList = segmentInfo.split ( ",");
+    String[] segmentList = segmentInfo.split ( ",");
 
     for ( int i = 0; i < segmentList.length; i++ ) {
     	inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentList[i]+"/metadata-*";
