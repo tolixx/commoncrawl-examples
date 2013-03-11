@@ -102,7 +102,6 @@ public class ExampleBackwards extends Configured implements Tool {
                 String  domain;
                 int     totalLinks = 0;
 
-                //Map<String,Integer> linkMap = new HashMap<String,Integer>();
                 
                 for (int i = 0; i < linksCount; i++) {
                     link = contentLinks.get(i).getAsJsonObject();
@@ -118,18 +117,6 @@ public class ExampleBackwards extends Configured implements Tool {
                     }
                 }
 
-
-
-				//--- use iterate to add values ---   
-				
-                /*
-				Iterator<Entry<String, Integer>> it = linkMap.entrySet().iterator();
-				while ( it.hasNext() ) {
-					Entry<String, Integer> entry = it.next();
-					output.collect ( new Text(entry.getKey()), new LongWritable(1)), 
-				}
-				LOG.info("added collector: " + url  + Integer.toString(linkMap.length) + ", total links: " + Integer.toString(totalLinks));			
-				*/
 
             } catch ( Exception ex ) {
             	LOG.error("Caught Exception", ex);
@@ -305,7 +292,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
     
     FileOutputFormat.setOutputPath(job, new Path(outputPath));
-    FileOutputFormat.setCompressOutput(job, true);
+    FileOutputFormat.setCompressOutput(job, false);
 
     // Set which InputFormat class to use.
     job.setInputFormat(SequenceFileInputFormat.class);
