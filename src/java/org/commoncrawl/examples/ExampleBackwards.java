@@ -54,6 +54,9 @@ import com.google.common.net.InternetDomainName;
  * 
  * @author Tolixx
  */
+
+
+
 public class ExampleBackwards extends Configured implements Tool {
 	
 	private static final Logger LOG = Logger.getLogger(ExampleBackwards.class);
@@ -73,10 +76,7 @@ public class ExampleBackwards extends Configured implements Tool {
             String json = value.toString();
 
             try {
-
-
             	reporter.incrCounter(this._counterGroup, "inputStream", 1);
-
             	this.reporter = reporter; 
             	String baseDomain = getDomainName (url);
             	
@@ -85,15 +85,12 @@ public class ExampleBackwards extends Configured implements Tool {
             	}
 
 
-            	
-
             	JsonArray contentLinks = getAllLinks ( json );
             	if ( contentLinks == null ) {
             		return; 
             	}
 
             	reporter.incrCounter(this._counterGroup, "validAllLinks", 1);
-
             	int linksCount = contentLinks.size();
             	reporter.incrCounter(this._counterGroup, "totalLinkCount", linksCount);
             	
@@ -112,7 +109,10 @@ public class ExampleBackwards extends Configured implements Tool {
                     	domain = getDomainName ( href );
 
                     	if ( domain != null ) {
-                    		output.collect ( new Text(domain), new LongWritable(1)); //--- output the ---          		
+                            if ( !domain.equalsIgnoreCase(baseDomain) ) {
+                    		    output.collect ( new Text(domain), new LongWritable(1));
+                                //--- inner links not used for reducing here ---
+                            }       		
                     	}
                     }
                 }
