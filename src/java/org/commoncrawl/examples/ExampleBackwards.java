@@ -85,8 +85,7 @@ public class ExampleBackwards extends Configured implements Tool {
             	}
 
 
-            	output.collect ( new Text(url), new LongWritable(1)); 
-            	/*
+            	
 
             	JsonArray contentLinks = getAllLinks ( json );
             	if ( contentLinks == null ) {
@@ -114,20 +113,11 @@ public class ExampleBackwards extends Configured implements Tool {
                     	domain = getDomainName ( href );
 
                     	if ( domain != null ) {
-                    		output.collect ( new Text(href), new LongWritable(1)); //--- output the ---
-                    		
-                    		if ( !domain.equalsIgnoreCase(baseDomain) ) {
-                    			//--- add external link, must be unique ---
-                    			++totalLinks;
-                    			output.collect ( new Text(href), new LongWritable(1)),
-                    			//reporter.incrCounter(this._counterGroup, "external.links", 1);
-                    			//map.put ( href, new Integer(1) );
-                    		}
-                    		
+                    		output.collect ( new Text(domain), new LongWritable(1)); //--- output the ---          		
                     	}
                     }
                 }
-                */
+
 
 
 				//--- use iterate to add values ---   
@@ -296,50 +286,14 @@ public class ExampleBackwards extends Configured implements Tool {
     String segmentInfo = this.getConf().get("segment.info");
     LOG.info ( "SegmentInfo readed : " + segmentInfo ); //--- si ---
 
-/*
-    String parts[] = segmentInfo.split("/"); //--- 1/2
-    
-    int segmentNum = 0;
-    int segmentAll = 0;
+    String segmentList = segmentInfo.split ( ",");
 
-
-    if ( parts.length == 2 ) {
-        segmentNum = Integer.valueOf(parts[0]);
-        segmentAll = Integer.valueOf(parts[1]);
+    for ( int i = 0; i < segmentList.length; i++ ) {
+    	inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentList[i]+"/metadata-*";
+       	FileInputFormat.addInputPath(job, new Path(inputPath));
+       	LOG.info ("file : " + inputPath + " added to inputPath");
     }
-*/
 
-
-
-    String segmentListFile = "s3n://aws-publicdatasets/common-crawl/parse-output/valid_segments.txt";
-    String inputPath = null;
-
-    fs = FileSystem.get(new URI(segmentListFile), job);
-    BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
-
-
-
-/*
-    while ((segmentId = reader.readLine()) != null) {
-       inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
-       lastSegment = inputPath; ///--- the last one --- 
-       ++counter;
-
-
-       if ( counter % segmentAll == (segmentNum - 1 ) ) {
-          ++used;
-          //FileInputFormat.addInputPath(job, new Path(inputPath));
-          //LOG.info("We just use segment '" + inputPath + "', counter  : " + Integer.toString(counter));
-          LOG.info("SegmentId : " + segmentId);
-       }
-       
-    }
-*/
-
-    inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/" + segmentInfo + "/metadata-*";
-    FileInputFormat.addInputPath(job, new Path(inputPath));
-
-    //LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
 
     fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
     LOG.info("clearing the output path at '" + outputPath + "'");
@@ -349,10 +303,9 @@ public class ExampleBackwards extends Configured implements Tool {
     if (fs.exists(new Path(outputPath)))
       fs.delete(new Path(outputPath), true);
 
-
     
     FileOutputFormat.setOutputPath(job, new Path(outputPath));
-    FileOutputFormat.setCompressOutput(job, false);
+    FileOutputFormat.setCompressOutput(job, true);
 
     // Set which InputFormat class to use.
     job.setInputFormat(SequenceFileInputFormat.class);
@@ -388,4 +341,3 @@ public class ExampleBackwards extends Configured implements Tool {
   }
 
 }
-
