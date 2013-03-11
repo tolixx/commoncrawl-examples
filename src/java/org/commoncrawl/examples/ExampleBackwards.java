@@ -235,7 +235,7 @@ public class ExampleBackwards extends Configured implements Tool {
 
     String outputPath = null;
     String configFile = null;
-    // String inputPath  = null;
+    String inputPath  = null;
 
     // Read the command line arguments.
     if (args.length <  1)
