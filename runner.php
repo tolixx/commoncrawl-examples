@@ -9,8 +9,14 @@ class runner {
 	protected $command = "bin/ccRunExample AmazonEMR ExampleBackwards uniqhosts ";
 	protected $slist = array();
 
+	protected $realCommands = 0;
+
 	public function __construct() {
 
+	}
+
+	public function __destruct() {
+		echo "Runner : ".$this->realCommands. " commands ready.\n";
 	}
 
 
@@ -19,11 +25,14 @@ class runner {
 			$line = trim($line);
 			$this->makeCommand ( $line );
 		}
+		$this->makeCommand ( null, true );
 	}
 
-	protected function makeCommand ( $segmentId ) {
+	protected function makeCommand ( $segmentId = null, $rest = false ) {
+		if ( !is_null ( $segmentId ) ) {
 		$this->slist[] = $segmentId;
-		if ( count ( $this->slist ) == self::segments ) {
+	}
+		if ( $rest || ( count ( $this->slist ) == self::segments ) ) {
 			$string = implode ( ",", $this->slist ); //--- slist ---
 			$this->coreCommand ( $string );
 			$this->slist = array();
@@ -32,6 +41,7 @@ class runner {
 
 	protected function coreCommand ( $string ) {
 		$tostart = $this->command." ".self::instances." ".$string;
+		++$this->realCommands;
 		echo $tostart."\n";
 	}
 }
