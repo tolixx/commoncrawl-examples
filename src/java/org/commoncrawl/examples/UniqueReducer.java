@@ -112,7 +112,7 @@ public class UniqueReducer extends Configured implements Tool {
     	String inputPath = null;
 
     //--- set the separator here ( purpose testing here ) ---
-    	this.getConf().setLong("mapreduce.input.keyvaluelinerecordreader.key.value.separator", "\t" );
+    	this.getConf().set("mapreduce.input.keyvaluelinerecordreader.key.value.separator", "\t" );
 
 
     	inputPath = "s3n://tolixuniq/emr/ExampleBackwards/1350433107105/part-00002";
