@@ -6,7 +6,7 @@ class runner {
 	const segments = 5;
 	const instances = 30; //--- instances per 5segs --
 
-	protected $command = "bin/ccRunExample AmazonEMR ExampleBackwards uniqhosts ";
+	protected $command = "bin/ccRunExample AmazonEMR ExampleBackwards tolixuniq ";
 	protected $slist = array();
 
 	protected $realCommands = 0;
