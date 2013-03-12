@@ -124,7 +124,7 @@ public class UniqueReducer extends Configured implements Tool {
 
 
 
-    	inputPath = "s3n:///tolixuniq/emr/ExampleBackwards/1350433107095/part-00012";
+    	inputPath = "s3n://tolixuniq/emr/ExampleBackwards/1350433107095/part-00012";
     	FileInputFormat.addInputPath(job, new Path(inputPath));
 
 
