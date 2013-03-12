@@ -58,16 +58,17 @@ import com.google.common.net.InternetDomainName;
 public class UniqueReducer extends Configured implements Tool {
 	private static final Logger LOG = Logger.getLogger(UniqueReducer.class);
 	public static class UniqueMapper
-      extends    MapReduceBase 
-      implements Mapper<Text, Text, Text, LongWritable> {
+	extends    MapReduceBase 
+	implements Mapper<Text, Text, Text, LongWritable> {
 
     // create a counter group for Mapper-specific statistics
-    private final String _counterGroup = "Custom Mapper Counters";
-    private Reporter reporter = null;
+		private final String _counterGroup = "Custom Mapper Counters";
+		private Reporter reporter = null;
 
-    public void map(Text key, Text value, OutputCollector<Text, LongWritable> output, Reporter reporter)
-        throws IOException {
+		public void map(Text key, Text value, OutputCollector<Text, LongWritable> output, Reporter reporter)
+		throws IOException {
         	output.collect ( key, new LongWritable(Integer.parseInt(value.toString()))); //--- integer
+        }
     }
 
     /**
@@ -77,102 +78,104 @@ public class UniqueReducer extends Configured implements Tool {
    *              out and interpreted by the Tool class.  
    * @return      0 if the Hadoop job completes successfully, 1 if not. 
    */
-  @Override
-  public int run(String[] args)
-      throws Exception {
+    @Override
+    public int run(String[] args)
+    throws Exception {
 
-    String outputPath = null;
-    String configFile = null;
+    	String outputPath = null;
+    	String configFile = null;
     // String inputPath  = null;
 
     // Read the command line arguments.
-    if (args.length <  1)
-      throw new IllegalArgumentException("Example JAR must be passed an output path.");
+    	if (args.length <  1)
+    		throw new IllegalArgumentException("Example JAR must be passed an output path.");
 
-    outputPath = args[0];
+    	outputPath = args[0];
 
-    if (args.length >= 2)
-      configFile = args[1];
+    	if (args.length >= 2)
+    		configFile = args[1];
 
-        
-    if (configFile != null) {
-      LOG.info("adding config parameters from '"+ configFile + "'");
-      this.getConf().addResource(configFile);
-    }
-    
+    	
+    	if (configFile != null) {
+    		LOG.info("adding config parameters from '"+ configFile + "'");
+    		this.getConf().addResource(configFile);
+    	}
+    	
     //setConfiguration();
     // Creates a new job configuration for this Hadoop job
 
-    JobConf job = new JobConf(this.getConf());
+    	JobConf job = new JobConf(this.getConf());
 
-    job.setJarByClass(UniqueReducer.class);
-    FileSystem fs;
-    String inputPath = null;
+    	job.setJarByClass(UniqueReducer.class);
+    	FileSystem fs;
+    	String inputPath = null;
 
     //--- set the separator here ( purpose testing here ) ---
-    this.getConf().setLong("mapreduce.input.keyvaluelinerecordreader.key.value.separator", "\t" );
+    	this.getConf().setLong("mapreduce.input.keyvaluelinerecordreader.key.value.separator", "\t" );
 
-   
-    inputPath = "s3n://tolixuniq/emr/ExampleBackwards/1350433107105/part-00002";
-    FileInputFormat.addInputPath(job, new Path(inputPath));
-
-
-    
-    LOG.info ( "We just added inputPath : " + inputPath );
-    
+    	
+    	inputPath = "s3n://tolixuniq/emr/ExampleBackwards/1350433107105/part-00002";
+    	FileInputFormat.addInputPath(job, new Path(inputPath));
 
 
-    inputPath = "s3n:///tolixuniq/emr/ExampleBackwards/1350433107095/part-00012";
-    FileInputFormat.addInputPath(job, new Path(inputPath));
-
-    
-    
-    LOG.info ( "We just added inputPath : " + inputPath );
-    
-
-    fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
-    LOG.info("clearing the output path at '" + outputPath + "'");
-
-    fs = FileSystem.get(new URI(outputPath), job);
-
-    if (fs.exists(new Path(outputPath)))
-      fs.delete(new Path(outputPath), true);
+    	
+    	LOG.info ( "We just added inputPath : " + inputPath );
+    	
 
 
-    
-    FileOutputFormat.setOutputPath(job, new Path(outputPath));
-    FileOutputFormat.setCompressOutput(job, false);
+    	inputPath = "s3n:///tolixuniq/emr/ExampleBackwards/1350433107095/part-00012";
+    	FileInputFormat.addInputPath(job, new Path(inputPath));
+
+    	
+    	
+    	LOG.info ( "We just added inputPath : " + inputPath );
+    	
+
+    	fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
+    	LOG.info("clearing the output path at '" + outputPath + "'");
+
+    	fs = FileSystem.get(new URI(outputPath), job);
+
+    	if (fs.exists(new Path(outputPath)))
+    		fs.delete(new Path(outputPath), true);
+
+
+    	
+    	FileOutputFormat.setOutputPath(job, new Path(outputPath));
+    	FileOutputFormat.setCompressOutput(job, false);
 
     // Set which InputFormat class to use.
-    job.setInputFormat(KeyValueTextInputFormat.class);
+    	job.setInputFormat(KeyValueTextInputFormat.class);
 
     // Set which OutputFormat class toString use.
-    job.setOutputFormat(TextOutputFormat.class);
+    	job.setOutputFormat(TextOutputFormat.class);
 
     // Set the output data types.
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(LongWritable.class);
+    	job.setOutputKeyClass(Text.class);
+    	job.setOutputValueClass(LongWritable.class);
     //job.setOutputValueClass(Text.class);
 
     //--- how to ---
 
     // Set which Mapper and Reducer classes to use. 
-    job.setMapperClass(UniqueReducer.UniqueMapper.class);
-    job.setReducerClass(LongSumReducer.class); 
+    	job.setMapperClass(UniqueReducer.UniqueMapper.class);
+    	job.setReducerClass(LongSumReducer.class); 
 
-    if (JobClient.runJob(job).isSuccessful())
-      return 0;
-    else
-      return 1;
-  }
+    	if (JobClient.runJob(job).isSuccessful())
+    		return 0;
+    	else
+    		return 1;
+    }
 
   /**
    * Main entry point that uses the {@link ToolRunner} class to run the example
    * Hadoop job.
    */
   public static void main(String[] args)
-      throws Exception {
-    int res = ToolRunner.run(new Configuration(), new LinkParser(), args);
-    System.exit(res);
+  throws Exception {
+  	
+  	int res = ToolRunner.run(new Configuration(), new UniqueReducer(), args);
+  	System.exit(res);
   }
+
 }
