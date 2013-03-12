@@ -32,6 +32,7 @@ import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.SequenceFileInputFormat;
+import org.apache.hadoop.mapred.KeyValueTextInputFormat;
 import org.apache.hadoop.mapred.TextOutputFormat;
 import org.apache.hadoop.mapred.lib.LongSumReducer;
 import org.apache.hadoop.util.Progressable;
@@ -95,12 +96,12 @@ public class UniqueReducer extends Configured implements Tool {
     	if (args.length >= 2)
     		configFile = args[1];
 
-    	
+
     	if (configFile != null) {
     		LOG.info("adding config parameters from '"+ configFile + "'");
     		this.getConf().addResource(configFile);
     	}
-    	
+
     //setConfiguration();
     // Creates a new job configuration for this Hadoop job
 
@@ -113,23 +114,23 @@ public class UniqueReducer extends Configured implements Tool {
     //--- set the separator here ( purpose testing here ) ---
     	this.getConf().setLong("mapreduce.input.keyvaluelinerecordreader.key.value.separator", "\t" );
 
-    	
+
     	inputPath = "s3n://tolixuniq/emr/ExampleBackwards/1350433107105/part-00002";
     	FileInputFormat.addInputPath(job, new Path(inputPath));
 
 
-    	
+
     	LOG.info ( "We just added inputPath : " + inputPath );
-    	
+
 
 
     	inputPath = "s3n:///tolixuniq/emr/ExampleBackwards/1350433107095/part-00012";
     	FileInputFormat.addInputPath(job, new Path(inputPath));
 
-    	
-    	
+
+
     	LOG.info ( "We just added inputPath : " + inputPath );
-    	
+
 
     	fs = FileSystem.get(new URI("s3n://aws-publicdatasets"), job);
     	LOG.info("clearing the output path at '" + outputPath + "'");
@@ -140,7 +141,7 @@ public class UniqueReducer extends Configured implements Tool {
     		fs.delete(new Path(outputPath), true);
 
 
-    	
+
     	FileOutputFormat.setOutputPath(job, new Path(outputPath));
     	FileOutputFormat.setCompressOutput(job, false);
 
@@ -173,7 +174,7 @@ public class UniqueReducer extends Configured implements Tool {
    */
   public static void main(String[] args)
   throws Exception {
-  	
+
   	int res = ToolRunner.run(new Configuration(), new UniqueReducer(), args);
   	System.exit(res);
   }
