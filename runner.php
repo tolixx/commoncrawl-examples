@@ -4,7 +4,7 @@ class runner {
 	
 	const File = "bin/slist.txt";
 	const segments = 5;
-	const instances = 30; //--- instances per 5segs --
+	const instances = 40; //--- instances per 5segs --
 
 	protected $command = "bin/ccRunExample AmazonEMR ExampleBackwards tolixuniq ";
 	protected $slist = array();
@@ -40,8 +40,8 @@ class runner {
 	}
 
 	protected function coreCommand ( $string ) {
-		$tostart = $this->command." ".self::instances." ".$string;
 		++$this->realCommands;
+		$tostart = $this->command." ".self::instances." ".$string. " >".$this->realCommands.".txt";
 		echo $tostart."\n";
 	}
 }
