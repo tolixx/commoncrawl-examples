@@ -114,20 +114,8 @@ public class UniqueReducer extends Configured implements Tool {
     //--- set the separator here ( purpose testing here ) ---
     	this.getConf().set("mapreduce.input.keyvaluelinerecordreader.key.value.separator", "\t" );
 
-
-    	inputPath = "s3n://tolixuniq/emr/ExampleBackwards/1350433107105/part-00002";
+    	inputPath = "s3n://tolixuniq/emr/ExampleBackwards/*/part-*";
     	FileInputFormat.addInputPath(job, new Path(inputPath));
-
-
-
-    	LOG.info ( "We just added inputPath : " + inputPath );
-
-
-
-    	inputPath = "s3n://tolixuniq/emr/ExampleBackwards/1350433107095/part-00012";
-    	FileInputFormat.addInputPath(job, new Path(inputPath));
-
-
 
     	LOG.info ( "We just added inputPath : " + inputPath );
 
