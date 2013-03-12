@@ -23,7 +23,7 @@ class runner {
 
 	protected function makeCommand ( $segmentId ) {
 		$this->slist[] = $segmentId;
-		if ( count ( $slist ) == self::segments ) {
+		if ( count ( $this->slist ) == self::segments ) {
 			$string = implode ( ",", $this->slist ); //--- slist ---
 			$this->coreCommand ( $string );
 			$this->slist = array();
