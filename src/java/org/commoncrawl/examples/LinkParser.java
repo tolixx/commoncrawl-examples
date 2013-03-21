@@ -61,13 +61,13 @@ public class LinkParser extends Configured implements Tool {
 
 	public static class LinkParserMapper
       extends    MapReduceBase 
-      implements Mapper<Text, Text, Text, LongWritable> {
+      implements Mapper<Text, Text, Text, Text> {
 
     // create a counter group for Mapper-specific statistics
     private final String _counterGroup = "Custom Mapper Counters";
     private Reporter reporter = null;
 
-    public void map(Text key, Text value, OutputCollector<Text,  LongWritable> output, Reporter reporter)
+    public void map(Text key, Text value, OutputCollector<Text, Text> output, Reporter reporter)
         throws IOException {
 
         	String url = key.toString();
@@ -360,14 +360,14 @@ public class LinkParser extends Configured implements Tool {
 
     // Set the output data types.
     job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(LongWritable.class);
-    //job.setOutputValueClass(Text.class);
+    //job.setOutputValueClass(LongWritable.class);
+    job.setOutputValueClass(Text.class);
 
     //--- how to ---
 
     // Set which Mapper and Reducer classes to use. 
     job.setMapperClass(LinkParser.LinkParserMapper.class);
-    job.setReducerClass(LongSumReducer.class); 
+    //job.setReducerClass(LongSumReducer.class); 
 
     if (JobClient.runJob(job).isSuccessful())
       return 0;
