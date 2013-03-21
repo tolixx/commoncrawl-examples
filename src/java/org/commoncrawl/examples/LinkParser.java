@@ -67,7 +67,7 @@ public class LinkParser extends Configured implements Tool {
     private final String _counterGroup = "Custom Mapper Counters";
     private Reporter reporter = null;
 
-    public void map(Text key, Text value, OutputCollector<Text, Text> output, Reporter reporter)
+    public void map(Text key, Text value, OutputCollector<Text,  LongWritable> output, Reporter reporter)
         throws IOException {
 
         	String url = key.toString();
