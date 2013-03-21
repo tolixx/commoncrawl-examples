@@ -365,7 +365,7 @@ public class LinkParser extends Configured implements Tool {
 
     // Set which Mapper and Reducer classes to use. 
     job.setMapperClass(LinkParser.LinkParserMapper.class);
-    job.setReducerClass(LongSumReducer.class); -- 
+    job.setReducerClass(LongSumReducer.class); 
 
     if (JobClient.runJob(job).isSuccessful())
       return 0;
