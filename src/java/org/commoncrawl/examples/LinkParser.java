@@ -331,7 +331,8 @@ public class LinkParser extends Configured implements Tool {
 
 
     if ( oneFile != null ) { 
-    	inputPath = "s3n://linksresults/results/000006.tar.gz";
+    	inputPath = "s3n://linksresults/results/*"; //--- all the files here ---
+        
     	FileInputFormat.addInputPath(job, new Path(inputPath));
     	LOG.info ( "We just added inputPath : " + inputPath );
     }
