@@ -339,7 +339,7 @@ public class LinkParser extends Configured implements Tool {
     String inputPath = null;
     
 
-    inputPath = "s3n://linksresults/results/000001.gz"; //--- all the files here ---
+    inputPath = "s3n://linksresults/results/*"; //--- all the files here ---
 
     FileInputFormat.addInputPath(job, new Path(inputPath));
     LOG.info ( "We just added inputPath : " + inputPath );
