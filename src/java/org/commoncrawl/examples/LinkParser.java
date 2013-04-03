@@ -346,7 +346,7 @@ public class LinkParser extends Configured implements Tool {
     // Set the output data types.
     job.setOutputKeyClass(Text.class);
     //job.setOutputValueClass(LongWritable.class);
-    job.setOutputValueClass(Text.class);
+    job.setOutputValueClass(IntegerPair.class);
 
     //--- how to ---
 
