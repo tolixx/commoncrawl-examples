@@ -242,11 +242,11 @@ public class LinkParser extends Configured implements Tool {
             Integer second = 0;
 
             while (values.hasNext()) {
-                IntegerPair value = values.next();
+                IntegerPair val = values.next();
                 first += val.first();
                 second += val.second();
             }
-            
+
             output.collect(key, new IntegerPair(first,second));
         }
     } 
