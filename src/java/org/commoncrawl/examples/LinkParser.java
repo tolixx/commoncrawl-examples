@@ -40,8 +40,8 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 
-import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.Reducer.Context;
+import org.apache.hadoop.mapred.Reducer;
+import org.apache.hadoop.mapred.Reducer.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
