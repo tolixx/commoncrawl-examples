@@ -314,8 +314,6 @@ public class LinkParser extends Configured implements Tool {
 
     
     String inputPath = null;
-
-    fs = FileSystem.get(new URI(segmentListFile), job);
     
 
     inputPath = "s3n://linksresults/results/000001.gz"; //--- all the files here ---
