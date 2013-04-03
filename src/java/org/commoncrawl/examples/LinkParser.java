@@ -124,6 +124,11 @@ public class LinkParser extends Configured implements Tool {
                                 URI uri = new URI(href);
                                 String path = uri.getPath();
 
+                                if ( path.equals("") ) {
+                                    reporter.incrCounter(this._counterGroup, "added slashes to empty path", 1);
+                                    href = href + "/";
+                                }
+
                                 if ( path.indexOf(".") == -1 ) {
                                     if ( path.lastIndexOf('/') != path.length() - 1 ) {
                                         reporter.incrCounter(this._counterGroup, "added slashes", 1);
