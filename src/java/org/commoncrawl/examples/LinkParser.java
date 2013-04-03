@@ -39,6 +39,10 @@ import org.apache.hadoop.util.Progressable;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.Reducer.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -233,9 +237,6 @@ public class LinkParser extends Configured implements Tool {
         
         IntegerPair pair = new IntegerPair();
 
-        public void setup(Context context) {
-
-        }  // setup()
 
         public void reduce(Text key, Iterable<IntegerPair> values, Context context)
         throws IOException, InterruptedException {
