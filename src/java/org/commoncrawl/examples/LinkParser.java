@@ -231,9 +231,8 @@ public class LinkParser extends Configured implements Tool {
   }
 
 
-  public static class LinksReduce extends
+  public static class LinksReduce  extends MapReduceBase implements 
     Reducer<Text,IntegerPair, Text, IntegerPair> {
-
 
 
         public void reduce(Text key, Iterable<IntegerPair> values, OutputCollector<Text,IntegerPair>  output,outputReporter reporter)
@@ -245,7 +244,6 @@ public class LinkParser extends Configured implements Tool {
                 first += val.first();
                 second += val.second();
             }
-            pair.init ( first, second );
             output.collect(key, new IntegerPair(first,second));
         }
     } 
