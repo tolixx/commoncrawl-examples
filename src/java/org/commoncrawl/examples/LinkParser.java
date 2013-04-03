@@ -234,11 +234,9 @@ public class LinkParser extends Configured implements Tool {
   public static class LinksReduce extends
     Reducer<Text,IntegerPair, Text, IntegerPair> {
 
-        
-        IntegerPair pair = new IntegerPair();
 
 
-        public void reduce(Text key, Iterable<IntegerPair> values, Context context)
+        public void reduce(Text key, Iterable<IntegerPair> values, OutputCollector<Text,IntegerPair>  output,outputReporter reporter)
         throws IOException, InterruptedException {
 
             Integer first = 0;
@@ -248,7 +246,7 @@ public class LinkParser extends Configured implements Tool {
                 second += val.second();
             }
             pair.init ( first, second );
-            context.write(key, pair);
+            output.collect(key, new IntegerPair(first,second));
         }
     } 
 
