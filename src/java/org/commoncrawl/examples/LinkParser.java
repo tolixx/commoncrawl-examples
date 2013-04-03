@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.URI;
-
+import java.util.Iterator;
 // Apache Project classes
 import org.apache.log4j.Logger;
 
