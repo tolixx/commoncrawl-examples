@@ -116,11 +116,28 @@ public class LinkParser extends Configured implements Tool {
                     	reporter.incrCounter(this._counterGroup, "validHrefs", linksCount);
                     	domain = getDomainName ( href );
 
+
+
                     	if ( domain != null ) {
+
+                            if ( href.indexOf("?") == - 1 ) {
+                                URI uri = new URI(href);
+                                String path = uri.getPath();
+
+                                if ( path.indexOf(".") == -1 ) {
+                                    if ( path.lastIndexOf('/') != path.length() - 1 ) {
+                                        reporter.incrCounter(this._counterGroup, "added slashes", 1);
+                                        href = href + "/";  
+                                    }
+                                }
+                            }
+
                             if ( domain.equalsIgnoreCase(baseDomain) ) {
                     		    output.collect ( new Text(href), new IntegerPair(1,0));
+                                reporter.incrCounter(this._counterGroup, "internal links", 1);
                             } else {
                                 output.collect ( new Text(href), new IntegerPair(0,1));
+                                reporter.incrCounter(this._counterGroup, "external links", 1);
                             }    
 	                    }
                     }
