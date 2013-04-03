@@ -240,10 +240,13 @@ public class LinkParser extends Configured implements Tool {
 
             Integer first = 0;
             Integer second = 0;
-            for (IntegerPair val : values) {
+
+            while (values.hasNext()) {
+                IntegerPair value = values.next();
                 first += val.first();
                 second += val.second();
             }
+            
             output.collect(key, new IntegerPair(first,second));
         }
     } 
