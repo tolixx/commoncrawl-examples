@@ -236,7 +236,7 @@ public class LinkParser extends Configured implements Tool {
 
 
         public void reduce(Text key, Iterator<IntegerPair> values, OutputCollector<Text,IntegerPair>  output, Reporter reporter)
-        throws IOException, InterruptedException {
+        throws IOException {
 
             Integer first = 0;
             Integer second = 0;
