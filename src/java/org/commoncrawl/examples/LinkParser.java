@@ -61,13 +61,13 @@ public class LinkParser extends Configured implements Tool {
 
 	public static class LinkParserMapper
       extends    MapReduceBase 
-      implements Mapper<Text, Text, Text, Text> {
+      implements Mapper<Text, Text, Text, IntegerPair> {
 
     // create a counter group for Mapper-specific statistics
     private final String _counterGroup = "Custom Mapper Counters";
     private Reporter reporter = null;
 
-    public void map(Text key, Text value, OutputCollector<Text, Text> output, Reporter reporter)
+    public void map(Text key, Text value, OutputCollector<Text, IntegerPair> output, Reporter reporter)
         throws IOException {
 
         	String url = key.toString();
@@ -113,27 +113,14 @@ public class LinkParser extends Configured implements Tool {
                     	domain = getDomainName ( href );
 
                     	if ( domain != null ) {
-                    		
-                    		if ( !domain.equalsIgnoreCase(baseDomain) ) {
- 
-                    			output.collect ( new Text(url), new Text(href));
-                    		}
-                    		
-                    	}
+                            if ( domain.equalsIgnoreCase(baseDomain) ) {
+                    		    output.collect ( new Text(href), new IntegerPair(1,0));
+                            } else {
+                                output.collect ( new Text(href), new IntegerPair(0,1));
+                            }    
+	                    }
                     }
                 }
-
-
-				//--- use iterate to add values ---   
-				
-                /*
-				Iterator<Entry<String, Integer>> it = linkMap.entrySet().iterator();
-				while ( it.hasNext() ) {
-					Entry<String, Integer> entry = it.next();
-					output.collect ( new Text(entry.getKey()), new LongWritable(1)), 
-				}
-				LOG.info("added collector: " + url  + Integer.toString(linkMap.length) + ", total links: " + Integer.toString(totalLinks));			
-				*/
 
             } catch ( Exception ex ) {
             	LOG.error("Caught Exception", ex);
@@ -239,6 +226,31 @@ public class LinkParser extends Configured implements Tool {
     }
   }
 
+
+  public static class LinksReduce extends
+    Reducer<Text,IntegerPair, Text, IntegerPair> {
+
+        
+        IntegerPair pair = new IntegerPair();
+
+        public void setup(Context context) {
+
+        }  // setup()
+
+        public void reduce(Text key, Iterable<IntegerPair> values, Context context)
+        throws IOException, InterruptedException {
+
+            Integer first = 0;
+            Integer second = 0;
+            for (IntegerPair val : values) {
+                first += val.first();
+                second += val.second();
+            }
+            pair.init ( first, second );
+            context.write(key, pair);
+        }
+    } 
+
   /**
    * Implmentation of Tool.run() method, which builds and runs the Hadoop job.
    *
@@ -301,41 +313,16 @@ public class LinkParser extends Configured implements Tool {
         segmentAll = Integer.valueOf(parts[1]);
     } 
 
-    String segmentListFile = "s3n://aws-publicdatasets/common-crawl/parse-output/valid_segments.txt";
+    
     String inputPath = null;
 
     fs = FileSystem.get(new URI(segmentListFile), job);
-    BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(new Path(segmentListFile))));
+    
 
+    inputPath = "s3n://linksresults/results/000001.gz"; //--- all the files here ---
 
-    String oneFile = "yes";
-
-    if ( oneFile == null ) { 
-    	while ((segmentId = reader.readLine()) != null) {
-    		inputPath = "s3n://aws-publicdatasets/common-crawl/parse-output/segment/"+segmentId+"/metadata-*";
-            lastSegment = inputPath; ///--- the last one --- 
-            ++counter;
-
-
-            if ( counter % segmentAll == (segmentNum - 1 ) ) {
-       	      ++used;
-       	      FileInputFormat.addInputPath(job, new Path(inputPath));
-       	      LOG.info("We just use segment '" + inputPath + "', counter  : " + Integer.toString(counter));
-            }
-       
-       }
-
-       LOG.info ( "We used : " + Integer.toString(used) + " segments, counter: " + Integer.toString(counter));
-    }
-
-
-
-    if ( oneFile != null ) { 
-    	inputPath = "s3n://linksresults/results/*"; //--- all the files here ---
-        
-    	FileInputFormat.addInputPath(job, new Path(inputPath));
-    	LOG.info ( "We just added inputPath : " + inputPath );
-    }
+    FileInputFormat.addInputPath(job, new Path(inputPath));
+    LOG.info ( "We just added inputPath : " + inputPath );
 
     
 
@@ -368,7 +355,7 @@ public class LinkParser extends Configured implements Tool {
 
     // Set which Mapper and Reducer classes to use. 
     job.setMapperClass(LinkParser.LinkParserMapper.class);
-    //job.setReducerClass(LongSumReducer.class); 
+    job.setReducerClass(LinkParser.LinksReduce.class); 
 
     if (JobClient.runJob(job).isSuccessful())
       return 0;
