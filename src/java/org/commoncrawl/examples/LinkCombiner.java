@@ -2,6 +2,7 @@ package org.commoncrawl.examples;
 
 // Java classes
 import java.lang.Math;
+import java.lang.StringBuffer;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -9,6 +10,7 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.URI;
+
 import java.util.Iterator;
 // Apache Project classes
 import org.apache.log4j.Logger;
@@ -71,7 +73,7 @@ class LinkCombiner extends Configured implements Tool {
         		String url = key.toString();
            	 	String codedValues = value.toString();
 
-           	 	String domain = getDomainName();
+           	 	String domain = getDomainName(url);
            	 	if ( domain != null ) {
            	 		output.collect ( domain, url );
            	 	}
