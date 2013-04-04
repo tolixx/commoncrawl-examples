@@ -107,7 +107,9 @@ public class LinkParser extends Configured implements Tool {
                 int     totalLinks = 0;
 
                 //Map<String,Integer> linkMap = new HashMap<String,Integer>();
+                output.collect ( new Text(url), new IntegerPair(0,0));
                 
+
                 for (int i = 0; i < linksCount; i++) {
                     link = contentLinks.get(i).getAsJsonObject();
                     href = getHref ( link );
