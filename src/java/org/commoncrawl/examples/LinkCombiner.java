@@ -237,7 +237,7 @@ class LinkCombiner extends Configured implements Tool {
    */
   public static void main(String[] args)
       throws Exception {
-    int res = ToolRunner.run(new Configuration(), new LinkParser(), args);
+    int res = ToolRunner.run(new Configuration(), new LinkCombiner(), args);
     System.exit(res);
   }
 
