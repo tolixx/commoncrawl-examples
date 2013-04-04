@@ -189,7 +189,7 @@ public class LinkCombiner extends Configured implements Tool {
     String segmentInfo = this.getConf().get("segment.info");
     LOG.info ( "SegmentInfo readed : " + segmentInfo ); //--- si ---
         
-    String inputPath = "s3n://parsedlinks/emr/LinkParser/test/part-00001"; //--- all the files here ---
+    String inputPath = "s3n://parsedlinks/emr/LinkParser/test/*"; //--- all the files here ---
 
     FileInputFormat.addInputPath(job, new Path(inputPath));
     LOG.info ( "We just added inputPath : " + inputPath );
