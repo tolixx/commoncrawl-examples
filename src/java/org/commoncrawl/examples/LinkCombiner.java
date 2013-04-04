@@ -65,7 +65,7 @@ class LinkCombiner extends Configured implements Tool {
     	private final String _counterGroup = "Custom Mapper Counters";
     	private Reporter reporter = null;
 
-    	public void map(Text key, Text value, OutputCollector<Text, IntegerPair> output, Reporter reporter)
+    	public void map(Text key, Text value, OutputCollector<Text,Text> output, Reporter reporter)
         	throws IOException {
 
         		this.reporter = reporter; 
@@ -75,7 +75,7 @@ class LinkCombiner extends Configured implements Tool {
 
            	 	String domain = getDomainName(url);
            	 	if ( domain != null ) {
-           	 		output.collect ( domain, url );
+           	 		output.collect ( new Text(domain), new Text(url) );
            	 	}
 
         	}
@@ -132,15 +132,15 @@ class LinkCombiner extends Configured implements Tool {
                 }
 
                 if ( counter % _urlCount  == 0 ) {
-                	output.collect ( key, sb.toString() );
+                	output.collect ( new Text(key), new Text(sb.toString()) );
                     reporter.incrCounter(this._counterGroup, "newStringBuffer", 1);
                 	sb = new StringBuffer(); //--- recreate buffer
                 	first = true;
                 }
             }
 
-            if ( sb.length() ) {
-            	output.collect ( key, sb.toString() );
+            if ( !sb.toString().equals("")  ) {
+            	output.collect ( new Text(key), new Text(sb.toString()) );
             }
         }
     } 
