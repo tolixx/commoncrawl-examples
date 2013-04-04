@@ -53,7 +53,7 @@ import com.google.gson.JsonArray;
 import com.google.common.net.InternetDomainName;
 
 class LinkCombiner extends Configured implements Tool {
-	private static final Logger LOG = Logger.getLogger(self.class);
+	private static final Logger LOG = Logger.getLogger(LinkCombiner.class);
 
 	public static class CombineMapper
       extends    MapReduceBase 
@@ -178,7 +178,7 @@ class LinkCombiner extends Configured implements Tool {
 
     JobConf job = new JobConf(this.getConf());
 
-    job.setJarByClass(self.class);
+    job.setJarByClass(LinkCombiner.class);
     FileSystem fs;
 
 
@@ -219,8 +219,8 @@ class LinkCombiner extends Configured implements Tool {
     //--- how to ---
 
     // Set which Mapper and Reducer classes to use. 
-    job.setMapperClass(self.CombineMapper.class);
-    job.setReducerClass(self.CombineReduce.class); 
+    job.setMapperClass(LinkCombiner.CombineMapper.class);
+    job.setReducerClass(LinkCombiner.CombineReducer.class); 
 
     if (JobClient.runJob(job).isSuccessful())
       return 0;
