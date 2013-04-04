@@ -54,7 +54,7 @@ import com.google.gson.JsonArray;
 
 import com.google.common.net.InternetDomainName;
 
-class LinkCombiner extends Configured implements Tool {
+public class LinkCombiner extends Configured implements Tool {
 	private static final Logger LOG = Logger.getLogger(LinkCombiner.class);
 
 	public static class CombineMapper
