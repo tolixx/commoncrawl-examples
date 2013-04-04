@@ -141,6 +141,7 @@ class LinkCombiner extends Configured implements Tool {
 
             if ( !sb.toString().equals("")  ) {
             	output.collect ( new Text(key), new Text(sb.toString()) );
+            	
             }
         }
     } 
