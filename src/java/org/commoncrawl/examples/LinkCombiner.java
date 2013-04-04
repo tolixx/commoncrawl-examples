@@ -128,7 +128,7 @@ class LinkCombiner extends Configured implements Tool {
                 	first = false;
                 	sb.append ( val.toString() );
                 } else {
-                	sb.append ( "||" + val.toString );
+                	sb.append ( "||" + val.toString() );
                 }
 
                 if ( counter % _urlCount  == 0 ) {
@@ -141,7 +141,7 @@ class LinkCombiner extends Configured implements Tool {
 
             if ( !sb.toString().equals("")  ) {
             	output.collect ( new Text(key), new Text(sb.toString()) );
-            	
+
             }
         }
     } 
