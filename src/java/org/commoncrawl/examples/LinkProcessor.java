@@ -410,6 +410,8 @@ public class LinkProcessor extends Configured implements Tool {
     	{
 
     	}
+
+    	return 0; 
     } 
 
 
