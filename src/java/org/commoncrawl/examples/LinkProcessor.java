@@ -281,8 +281,8 @@ public class LinkProcessor extends Configured implements Tool {
 					replaced = true;
 					url = data;
 				} else {
-					String[] data = data.split("\t");
-					if ( data.length == 2 ) {
+					String[] rawData = data.split("\t");
+					if ( dataData.length == 2 ) {
 						towrite = true;
 					}
 				}
