@@ -283,7 +283,7 @@ public class LinkProcessor extends Configured implements Tool {
 					url = data;
 				} else {
 					String[] rawData = data.split("\t");
-					if ( dataData.length == 2 ) {
+					if ( rawData.length == 2 ) {
 						towrite = true;
 						theData = data;
 					}
