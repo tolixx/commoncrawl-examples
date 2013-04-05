@@ -362,8 +362,8 @@ public class LinkProcessor extends Configured implements Tool {
     		job.setOutputValueClass(IntegerPair.class);
 
 
-    		job.setMapperClass(LinkProcessor.LinkMapper.class);
-    		job.setReducerClass(LinkProcessor.LinkReducer.class); 
+    		job.setMapperClass(LinkProcessor.LinksMapper.class);
+    		job.setReducerClass(LinkProcessor.LinksReducer.class); 
 
     		if (JobClient.runJob(job).isSuccessful()) {
     			LOG.info ( "1 : JOB complete successfully" );
