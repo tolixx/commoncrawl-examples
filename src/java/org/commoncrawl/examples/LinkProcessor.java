@@ -330,7 +330,7 @@ public class LinkProcessor extends Configured implements Tool {
     	}
 
 
-    	String  redirectSource = "s3n://linksresults/redirects/"; //-- mix to replace ---  
+    	String  redirectSource = "s3n://linksresults/redirects/*"; //-- mix to replace ---  
 
         String  firstInput = "s3n://linksresults/results/000001.gz";
     	
@@ -383,6 +383,8 @@ public class LinkProcessor extends Configured implements Tool {
     		
 
     		FileInputFormat.addInputPath(job, new Path(firstOutput + "*"));
+    		FileInputFormat.addInputPath(job, new Path(redirectSource) );
+
     		LOG.info("clearing the output path at '" + firstOutput + "'");
     		fs = FileSystem.get(new URI(secondOutput), job);
 
