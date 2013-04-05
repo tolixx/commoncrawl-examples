@@ -301,6 +301,121 @@ public class LinkProcessor extends Configured implements Tool {
     		}
     	}
     } 
+
+    /* COMBINE MAPPER and REDUCERS below */
+    public static class CombineMapper
+      extends    MapReduceBase 
+      implements Mapper<Text, Text, Text, Text> {
+
+    	// create a counter group for Mapper-specific statistics
+    	private final String _counterGroup = "Combine Mapper Counters";
+    	private Reporter reporter = null;
+
+    	public void map(Text key, Text value, OutputCollector<Text,Text> output, Reporter reporter)
+        	throws IOException {
+
+        		this.reporter = reporter; 
+        		
+        		String url = key.toString();
+           	 	String codedValues = value.toString();
+
+           	 	String domain = getDomainName(url);
+           	 	if ( domain != null ) {
+           	 		output.collect ( new Text(domain), new Text(url) );
+           	 	} else {
+           	 		reporter.incrCounter(this._counterGroup, "getDomainName().NULL", 1);
+           	 	}
+
+        	}
+
+        protected String getDomainName ( String url ) {
+        	try {
+            	URI uri = new URI(url);
+
+            	String host = uri.getHost();
+            	String scheme = uri.getScheme();
+
+            	if (host == null) {
+                	return null;
+            	}
+
+            	if ( !scheme.equalsIgnoreCase("http") && !scheme.equalsIgnoreCase("https") ) {
+            		reporter.incrCounter(this._counterGroup, "scheme."+scheme, 1);
+            		return null;
+            	}
+
+            	InternetDomainName domainObj = InternetDomainName.from(host);
+            	String baseDomain = domainObj.topPrivateDomain().name();
+
+            	return baseDomain;
+        	} catch ( Exception ex ) {
+        		reporter.incrCounter(this._counterGroup, "getDomainName.Exceptions", 1);
+        		return null;
+        	}
+    }	
+    }
+
+    public static class CombineReducer  extends MapReduceBase implements 
+    Reducer<Text,Text, Text, Text> {
+
+    	private final String _counterGroup = "Combine Reducer Counters";
+    	private final Integer _urlCount = 50;
+    	private final String separator = "||"
+
+        public void reduce(Text key, Iterator<Text> values, OutputCollector<Text,Text>  output, Reporter reporter)
+        throws IOException {
+
+            Integer counter = 0;
+            StringBuffer sb = new StringBuffer();
+
+            Boolean first = true; //--- true --- 
+            Boolean hasIndex = false;
+
+            reporter.incrCounter(this._counterGroup, "reduceEntries", 1);
+ 
+            while (values.hasNext()) {
+                Text val = values.next();
+                ++counter; 
+
+                try {
+            		URI uri = new URI(val.toString());
+            		String path = uri.getPath();
+            		if ( path.equals("/") ) {
+            			hasIndex = true;
+            		}
+                } catch ( Exception ex ) {
+                	reporter.incrCounter(this._counterGroup, "reduceParseExceptions", 1);
+                }
+
+                if ( first ) {
+                	first = false;
+                	sb.append ( val.toString() );
+                } else {
+                	sb.append ( separator + val.toString() );
+                }
+
+                if ( counter % _urlCount  == 0 ) {
+                	output.collect ( new Text(key), new Text(sb.toString()) );
+                    reporter.incrCounter(this._counterGroup, "newStringBuffer", 1);
+                	sb = new StringBuffer(); //--- recreate buffer
+                	first = true;
+                }
+            }
+
+            if ( !hasIndex ) {
+            	if ( !first ) {
+            		sb.append(separator);
+            	}
+            	sb.append("http://" + key + "/" ); //--- index added ---
+            	reporter.incrCounter(this._counterGroup, "appendedIndexPage", 1);
+            }
+
+            if ( !sb.toString().equals("")  ) {
+            	output.collect ( new Text(key), new Text(sb.toString()) );
+
+            }
+        }
+    } 
     /**
    * Implmentation of Tool.run() method, which builds and runs the Hadoop job.
    *
@@ -334,15 +449,15 @@ public class LinkProcessor extends Configured implements Tool {
 
         String  firstInput = "s3n://linksresults/results/000001.gz";
     	
-    	String  firstOutput = "s3n://parsedlinks/output/reduced/";
+    	String  firstOutput  = "s3n://parsedlinks/output/reduced/";
     	String  secondOutput = "s3n://parsedlinks/output/replaced/";
-
+    	String  thirdOutput  = "s3n://parsedlinks/output/combined/";
 
     	{
-    		LOG.info ( "Starting first job" ) ;
+    		LOG.info ( "1: Starting Linker JOB here" ) ;
     		JobConf job = new JobConf(this.getConf());
 
-    		job.setJarByClass(ExampleMetadataDomainPageCount.class);
+    		job.setJarByClass(LinkProcessor.class);
     		FileSystem fs;
 
     		
@@ -368,7 +483,10 @@ public class LinkProcessor extends Configured implements Tool {
     		job.setReducerClass(LinkProcessor.LinksReducer.class); 
 
     		if (JobClient.runJob(job).isSuccessful()) {
-    			LOG.info ( "1 : JOB complete successfully" );
+    			LOG.info ( "1 : Linker JOB complete successfully" );
+    		} else {
+    			LOG.info ( "1 : Linker JOB failed" );
+    			return 1;
     		}
     	}  
 
@@ -377,7 +495,7 @@ public class LinkProcessor extends Configured implements Tool {
     		LOG.info ( "2 : Starting REPLACE job" ) ;
     		JobConf job = new JobConf(this.getConf());
 
-    		job.setJarByClass(ExampleMetadataDomainPageCount.class);
+    		job.setJarByClass(LinkProcessor.class);
     		FileSystem fs;
 
     		
@@ -406,11 +524,48 @@ public class LinkProcessor extends Configured implements Tool {
 
     		if (JobClient.runJob(job).isSuccessful()) {
     			LOG.info ( "2 : Replace JOB complete successfully" );
+    		} else {
+    			LOG.info ( "2 : Replace JOB failed" );
+    			return 1;
     		}
     	}
 
-    	{
 
+    	{
+    		LOG.info ( "3 : Starting COMBINE job" ) ;
+    		JobConf job = new JobConf(this.getConf());
+
+    		job.setJarByClass(LinkProcessor.class);
+    		FileSystem fs;
+
+    		
+
+    		FileInputFormat.addInputPath(job, new Path(secondOutput + "*"));
+    	
+    		LOG.info("clearing the output path at '" + thirdOutput + "'");
+    		fs = FileSystem.get(new URI(thirdOutput), job);
+
+    		if (fs.exists(new Path(thirdOutput)))
+    			fs.delete(new Path(thirdOutput), true);
+
+    		FileOutputFormat.setOutputPath(job, new Path(thirdOutput));
+    		FileOutputFormat.setCompressOutput(job, false);
+
+    		job.setInputFormat(KeyValueTextInputFormat.class);
+    		job.setOutputFormat(TextOutputFormat.class);
+    		job.setOutputKeyClass(Text.class);
+    		job.setOutputValueClass(Text.class);
+
+
+    		job.setMapperClass(LinkProcessor.CombineMapper.class);
+    		job.setReducerClass(LinkProcessor.CombineReducer.class); 
+
+    		if (JobClient.runJob(job).isSuccessful()) {
+    			LOG.info ( "3 : Combine JOB complete successfully" );
+    		} else {
+    			LOG.info ( "3 : Combine JOB failed" );
+    			return 1;
+    		}
     	}
 
     	return 0; 
