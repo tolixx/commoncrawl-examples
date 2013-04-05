@@ -272,6 +272,7 @@ public class LinkProcessor extends Configured implements Tool {
     		Boolean replaced = false;
 
     		String  url = key.toString();
+    		String  theData = null;
 
     		while (values.hasNext()) {
     			Text val = values.next();
@@ -284,6 +285,7 @@ public class LinkProcessor extends Configured implements Tool {
 					String[] rawData = data.split("\t");
 					if ( dataData.length == 2 ) {
 						towrite = true;
+						theData = data;
 					}
 				}
 
@@ -291,7 +293,7 @@ public class LinkProcessor extends Configured implements Tool {
 
     		if ( towrite ) {
     			reporter.incrCounter(this._counterGroup, "reduceroutput", 1);
-    			output.collect ( new Text(url), new Text(data) );
+    			output.collect ( new Text(url), new Text(theData) );
     			if ( replaced ) {
     				reporter.incrCounter(this._counterGroup, "reducerreplaced", 1);
     			}
