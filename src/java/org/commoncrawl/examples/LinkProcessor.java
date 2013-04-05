@@ -279,6 +279,7 @@ public class LinkProcessor extends Configured implements Tool {
 				String data = val.toString(); //--- string representation ---
 
 				if ( data.indexOf ( "http") == 0 ) {
+					reporter.incrCounter(this._counterGroup, "replacement.used", 1);
 					replaced = true;
 					url = data;
 				} else {
@@ -292,10 +293,10 @@ public class LinkProcessor extends Configured implements Tool {
     		}
 
     		if ( towrite ) {
-    			reporter.incrCounter(this._counterGroup, "reduceroutput", 1);
+    			reporter.incrCounter(this._counterGroup, "reducer.output", 1);
     			output.collect ( new Text(url), new Text(theData) );
     			if ( replaced ) {
-    				reporter.incrCounter(this._counterGroup, "reducerreplaced", 1);
+    				reporter.incrCounter(this._counterGroup, "reducer.replaced", 1);
     			}
 
     		}
@@ -446,8 +447,7 @@ public class LinkProcessor extends Configured implements Tool {
 
 
     	String  redirectSource = "s3n://linksresults/redirects/*"; //-- mix to replace ---  
-
-        String  firstInput = "s3n://linksresults/results/000001.gz";
+        String  firstInput = "s3n://linksresults/results/*";
     	
     	String  firstOutput  = "s3n://parsedlinks/output/reduced/";
     	String  secondOutput = "s3n://parsedlinks/output/replaced/";
