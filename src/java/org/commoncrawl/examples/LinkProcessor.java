@@ -360,7 +360,7 @@ public class LinkProcessor extends Configured implements Tool {
 
     	private final String _counterGroup = "Combine Reducer Counters";
     	private final Integer _urlCount = 50;
-    	private final String separator = "||"
+    	private final String separator = "||";
 
         public void reduce(Text key, Iterator<Text> values, OutputCollector<Text,Text>  output, Reporter reporter)
         throws IOException {
